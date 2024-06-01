@@ -1,0 +1,425 @@
+.landingPage {
+    background-color: #FFFFFF;
+    height: auto;
+    padding-top: 200px;
+    max-width: 80%;
+    margin: 0 auto;
+    display: flex;
+    position: relative; /* Make the landingPage container relative for pseudo-element positioning */
+  }
+  
+  .left {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    position: relative; /* Make the left container relative */
+  }
+  
+  .left h1,
+  .about-section .title h1 {
+    font-size: 55px;
+  }
+  
+  .left h1 span,
+  .about-section .title h1 span {
+    color: #4343FF;
+    font-weight: 600;
+  }
+  
+  .left h4 {
+    margin-top: 18px;
+    font-size: 16px;
+  }
+  
+  .left a {
+    margin-top: 65px;
+  }
+  
+  .left a button {
+    width: 151px;
+    height: 45px;
+    border: none;
+    background-color: #4343FF;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .left span {
+    margin-top: 8px;
+  }
+  
+  .right {
+    width: 50%;
+    display: flex;
+    justify-content: end;
+  }
+
+  .right .slider {
+    border-radius: 20px;
+    width: 75.83%;
+  }
+  
+  /* Pseudo-element for the dashed line */
+  .landingPage::before {
+    content: '';
+    position: absolute;
+    top: 150px;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background-image: linear-gradient(to bottom, #000 55%, rgba(0, 0, 0, 0) 0%);
+    background-size: 2px 8px;
+    background-repeat: repeat-y;
+    height: 65vh;
+  }
+
+  .explore-reports {
+    margin-top: 150px;
+  }
+
+  .explore-reports h2 {
+    text-align: center;
+    margin: 10px;
+  }
+
+  .marque-container {
+    border-top: 1px solid #B7B4B4;
+    border-bottom: 1px solid #B7B4B4;
+  }
+  
+  .marque-slider {
+    max-width: 80%;
+    margin: 10px auto;
+  }
+  
+  .svg-logos {
+    display: flex;
+    align-items: center; 
+    gap: 15px;
+  }
+  
+  .svg {
+    height: 40px;
+    width: 155px;
+    margin: 15px 10px; 
+  }
+
+  .why-section {
+    max-width: 80%;
+    margin: 80px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+  }
+
+  .why1, .why2 {
+    width: 50%;
+  }
+
+  .why1 p,
+  .why2 p {
+    margin-top: 12px;
+  }
+  
+  .about-section {
+    max-width: 80%;
+    margin: 50px auto;
+  }
+
+
+  .about-section .title h1,
+  .about-section .title p{
+    text-align: center;
+  }
+
+  .about-section .title p {
+    font-size: 16px;
+  }
+
+  .about-section .about {
+    display: flex;
+    position: relative;
+    margin: 50px 0px;
+  }
+
+  .about-section .about .right img {
+    width: 50%;
+  }
+
+  .about-section .about::before {
+    content: '';
+    position: absolute;
+    top: 0px;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background-image: linear-gradient(to bottom, #000 55%, rgba(0, 0, 0, 0) 0%);
+    background-size: 2px 8px;
+    background-repeat: repeat-y;
+    height: 45vh;
+  }
+
+  .about-section .about .left {
+    justify-content: center;
+  }
+
+  .about-section .about .right {
+    position: relative;
+    justify-content: start;
+    left: 80px;
+  }
+
+  .about-section .about.middle .right {
+    left: 0px;
+  }
+
+  .middle .left {
+    align-items: start;
+    left: 80px;
+  }
+
+  .faq-section {
+    max-width: 80%;
+    margin: 80px auto;
+  }
+
+  .faq-section h2 {
+    text-align: center;
+    margin: 20px 0px;
+  }
+
+  .subscribe-section {
+    max-width: 80%;
+    margin: 0 auto;
+  }
+
+  .subscribe-section .title {
+    text-align: center;
+  }
+
+  .subscribe-section .title span {
+    color: #4343FF;
+    font-weight: 600;
+  }
+
+  .subscribe-section .subscribe-form {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  .subscribe-section .subscribe-form form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .subscribe-section .subscribe-form form button {
+    margin-top: 20px;
+  }
+
+  .subscribe-section .subscribe-form input:focus {
+    outline-width: 0;
+  }
+  .subscribe-section .subscribe-form input {
+    width: 200px;
+    background-color: white;
+    border-radius: 0px;
+    border: none;
+    border-bottom: 1px solid black;
+  }
+  
+  .ourMembers h2 {
+    text-align: center;
+  }
+
+  .ourMembers h2 span {
+    color: #4343FF;
+    font-weight: 600;
+  }
+  
+  .members {
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    align-items: start;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin: 40px 0;
+    padding-bottom: 20px;
+  }
+  
+  .member .memberImg {
+    width: 230px;
+    height: 230px;
+    border-radius: 9px;
+    object-fit: cover;
+  }
+  
+  .member {
+    position: relative;
+  }
+  
+  .member h3,
+  .member p {
+    text-align: center;
+  }
+
+  .socials {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+  }
+  .socials img {
+    width: 25px;
+    border-radius: 0px;
+  }
+
+  .snackbar {
+    position: fixed;
+    background-color: #4343FF;
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    padding: 10px 10px;
+    top: 10%;
+    left: 40%;
+    z-index: 1000;
+    border: 0.5px solid black;
+  }
+
+  .close-button {
+    font-size: 18px;
+    cursor: pointer;
+  }
+    
+
+  @media (max-width: 768px) {
+    .landingPage {
+        flex-direction: column;
+        padding-top: 120px;
+    }
+
+    .explore-reports h2 {
+      font-size: 16px;
+  }
+
+    .landingPage::before,
+    .about-section .about::before {
+        display: none;
+    }
+
+    .left {
+        width: 100%;
+    }
+
+    .left h1,
+    .about-section .title h1 {
+        font-size: 24px;
+    }
+    
+    .left a {
+        margin-top: 27px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .left span {
+      text-align: center;
+    }
+
+    .left a button {
+      width: 131px !important;
+      height: 45px !important;
+      padding: 5px 5px !important;
+    }
+
+    .landingPage .right {
+        margin-top: 50px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .right .slider {
+        width: 100%;
+      }
+
+      .explore-reports {
+        margin: 80px auto;
+    }
+
+    .svg-logos {
+      gap: 0px;
+  }
+
+    .svg {
+      height: 30px;
+      width: 80px;
+      margin: 30px 10px;
+    }
+
+    .marque-slider {
+      margin: 0px auto;
+    }
+
+    .why-section {
+     flex-direction: column;
+    }
+
+    .why1, .why2 {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .about-section .about {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .about-section .about .left {
+      justify-content: start;
+    }
+  
+    .about-section .about .right {
+      justify-content: start;
+      left: 0px;
+    }
+
+    .middle {
+      display: flex;
+      flex-direction: column-reverse !important;
+    }
+
+    .middle .left {
+      align-items: start;
+      left: 0px;
+    }
+
+    .about-section .about .right img {
+      width: 100%;
+    }
+
+    .about .right {
+      width: 100%;
+      justify-content: center;
+  }
+
+  .faq-section h2 {
+    font-size: 16px;
+}
+
+.faq-section {
+  max-width: 100%;
+  margin: 80px auto;
+}
+  }
+
+  

@@ -1,0 +1,124 @@
+.footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    width: 100%;
+    background-color: #121212;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.103);
+    margin-top: auto;
+}
+
+.upperSection {
+    display: flex;
+    flex-direction: row;
+    color: white;
+    width: 80%;
+    margin: 50px auto;
+    gap: 50px;
+}
+
+.lowerSection {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    width: 60%;
+    border-top: 1px solid white;
+}
+
+.footerAbout {
+    width: 50%;
+}
+
+.footerCompany,
+.footerHelp {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+}
+
+.footerCompany a,
+.footerHelp a {
+    color: white;
+    text-decoration: none;
+}
+
+
+
+.lowerSection {
+    padding: 30px 20px 0px 20px; /* Adjust padding as needed */
+    color: white;
+}
+
+.lowerSection h3 {
+    font-weight: 100;
+    font-size: 13px;
+    text-align: center; /* Center text within the container */
+}
+
+.lowerSection span {
+    text-align: center;
+    margin: 20px 0px;
+}
+
+.footerAbout h4,
+.footerCompany span,
+.footerHelp span {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    position: relative; /* Necessary for positioning the ::after element */
+    display: inline-block; /* Ensure it only extends to the width of the text */
+}
+
+.footerAbout h4::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #4343FF;
+}
+
+.footerCompany span::after,
+.footerHelp span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 28%;
+    height: 2px;
+    background-color: #4343FF;
+}
+
+
+
+
+.footerHelp .cta {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+@media (max-width: 768px) {
+    .upperSection {
+        flex-direction: column;
+        width: auto;
+        gap: 50px;
+        margin: 50px 25px  !important;
+    }
+
+    .footerAbout,
+    .footerCompany,
+    .footerHelp{
+        width: 100%;
+    }
+
+    .lowerSection {
+        width: auto;
+    }
+    
+    
+}

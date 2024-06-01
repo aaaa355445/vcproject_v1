@@ -1,0 +1,102 @@
+.contact-section {
+    height: auto;
+    padding-top: 150px;
+    max-width: 80%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.contact-section h1,
+.contact-section h3 {
+    text-align: center;
+}
+
+.contact-section h3 {
+    font-weight: 300;
+}
+
+.contact-section h1 span {
+    color: #4343FF;
+    font-weight: 500;
+}
+
+.contact-form {
+    margin: 50px auto;
+    width: 50%;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+input,
+textarea {
+    padding: 16px 12px;
+    margin-top: 8px;
+    color: black;
+    font-family: "Nunito Sans", sans-serif;
+}
+
+.input button {
+    width: 151px;
+    height: 45px;
+    border: 1px solid #4343FF;
+    background-color: white;
+    color: #4343FF;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button {
+    width: 151px;
+    height: 45px;
+    border: none;
+    background-color: #4343FF;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submitBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.submitBtn span {
+    font-size: 13px;
+}
+
+.contact-form label {
+    font-weight: bold;
+}
+
+.input .checklist {
+    margin-bottom: 10px;
+}
+
+.input .checklistlabel {
+    font-weight: 500 !important;
+}
+
+
+@media (max-width: 768px) {
+.contact-form {
+    width: 100%;
+}
+
+.submitBtn {
+    margin-top: 50px;
+}
+}

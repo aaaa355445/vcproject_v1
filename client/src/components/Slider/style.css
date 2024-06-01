@@ -1,0 +1,33 @@
+.slider-container {
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 20px;
+  height: 355px;
+}
+
+
+img.slider-image {
+  border-radius: 20px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.slick-dots li button:before {
+  color: #ddd;
+  font-size: 8px;
+}
+
+.slick-dots li.slick-active button:before {
+  color: #000;
+}
+
+.slick-dots {
+  bottom: 10px;
+}
+
+
+@media (max-width: 768px) {
+  .slider-container {
+    height: 185px;
+  }
+}

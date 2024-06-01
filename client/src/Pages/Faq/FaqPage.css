@@ -1,0 +1,10 @@
+.faqSection {
+    height: 80vh;
+    padding-top: 150px;
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.faqSection h2 {
+    text-align: center;
+}

@@ -1,0 +1,169 @@
+.link {
+    text-decoration: none;
+    display: flex;
+}
+
+.CardSection {
+    width: 270px;
+    background-color: white;
+    box-shadow: 0 3px 10px rgba(66, 66, 66, 0.342);
+    overflow: hidden; /* Prevents overflowing content */
+    border-radius: 13px;
+
+}
+
+.CardSection img {
+    width: 100%;
+    height: 152px; /* Adjust the height as needed */
+    object-fit: cover; /* Maintains the aspect ratio of the image */
+}
+
+.CardSection .cardContent {
+    background-color: white;
+    padding: 7px;
+    min-height: 100px; /* Set a minimum height for consistent appearance */
+}
+
+.CardSection .cardContent h2 {
+    font-size: 16px;
+    color: black;
+    max-height: 3em; /* Two lines with line height */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Truncate text with ellipsis */
+    white-space: normal; /* Prevent text from collapsing into one line */
+    -webkit-line-clamp: 2; /* Limit the number of lines */
+    -webkit-box-orient: vertical; /* Ensure text is truncated vertically */
+    display: -webkit-box;
+}
+
+.CardSection .cardContent h4 {
+    font-size: 14px;
+    color: rgb(87, 87, 87);
+}
+
+.CardSection .readMoreLink {
+    display: block;
+    color: #007bff; /* Blue link color, change as needed */
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.cardContent span {
+    display: inline-block; /* Display each span tag on a new line */
+    margin-right: 5px; /* Add some spacing between each span tag */
+    margin-bottom: 5px; /* Add some spacing between lines */
+    background-color: #B7B4B4;
+    color: white;
+    padding: 5px 8px;
+    font-size: 10px;
+    border-radius: 30px;
+}
+
+.titles {
+    height: 70px !important;
+}
+
+.tags {
+    height: 4em;
+    overflow: hidden;
+    border-bottom: 1px solid #B7B4B4;;
+}
+
+.readBtn {
+    margin: 16px 0px;
+    display: flex;
+    justify-content: end;
+}
+
+.readBtn button {
+    width: 105px !important;
+    height: 35px !important;
+    border: none;
+    background-color: #4343FF;
+    color: white;
+    padding: 10px;
+    font-size: 13px !important;
+    cursor: pointer;
+    border-radius: 30px;
+}
+
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .popupContent {
+    position: relative;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    height: 300px;
+  }
+
+  .bar {
+    height: 20%;
+    background-color: #4343FF;
+    position: relative;
+  }
+
+  .bar img {
+    width: 12%;
+    position: absolute;
+    left: 43%;
+    top: 20px;
+    border-radius: 50%;
+  }
+  .formSection {
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .formSection p {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  form input {
+    margin-bottom: 10px;
+    padding: 10px;
+  }
+  
+  form button {
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    margin: 0 auto;
+}
+  
+  form button:hover {
+    background-color: #0056b3;
+  }
+  
+
+  .closeButton {
+    position: absolute;
+    top: 8px;
+    right: -30px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 99;
+  }

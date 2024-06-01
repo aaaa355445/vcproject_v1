@@ -1,0 +1,42 @@
+import React from "react";
+import styles from "./Footer.module.css";
+
+const Footer = () => {
+  return (
+    <div className={styles.footer}>
+      <div className={styles.upperSection}>
+        <div className={styles.footerAbout}>
+          <h4>The VC Project</h4>
+          <p>
+            India's largest reports repository for investors, analysts and
+            founders
+          </p>
+        </div>
+        <div className={styles.footerCompany}>
+          <span>Company</span>
+          <div className="cta">
+            <a href="">Reports</a>
+          </div>
+        </div>
+        <div className={styles.footerHelp}>
+          <span>Get Help</span>
+          <div className={styles.cta}>
+            <a href="">Contact us</a>
+            <a href="">FAQs</a>
+          </div>
+        </div>
+      </div>
+      <div className={styles.lowerSection}>
+        <h3>
+          *This project in no way intends to benefit by re-distribution or
+          copying of author's report. This is purely for informational & ease
+          purposes. If you'd rather not have your report listed here, please
+          contact us to get it removed within 48 hours.{" "}
+        </h3>
+        <span>© 2024 The VC Project | All rights reserved</span>
+      </div>
+    </div>
+  );
+};
+
+export default Footer;
