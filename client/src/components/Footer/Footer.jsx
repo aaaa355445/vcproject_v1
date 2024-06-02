@@ -15,14 +15,14 @@ const Footer = () => {
         <div className={styles.footerCompany}>
           <span>Company</span>
           <div className="cta">
-            <a href="">Reports</a>
+            <a href="/report">Reports</a>
           </div>
         </div>
         <div className={styles.footerHelp}>
           <span>Get Help</span>
           <div className={styles.cta}>
-            <a href="">Contact us</a>
-            <a href="">FAQs</a>
+            <a href="/contact">Contact us</a>
+            <a href="/faq">FAQs</a>
           </div>
         </div>
       </div>

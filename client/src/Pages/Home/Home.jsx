@@ -74,7 +74,7 @@ const Home = () => {
             India is booming, We help you make sense of different sectors in its
             multi-country country.
           </h4>
-          <a href="#">
+          <a href="/reports">
             <button>VIEW REPORTS</button>
           </a>
           <span>Free forever, no sign-up needed</span>
@@ -280,7 +280,7 @@ const Home = () => {
                 src="https://vc-thumbnails.blr1.cdn.digitaloceanspaces.com/carousel/Team_Member/Ayush.webp"
                 alt=""
               />
-              <h3>Ayush</h3>
+              <h3>Insightful Ayush</h3>
               <p>Redseer Strategy Consultants</p>
               <p>Product & Growth</p>
               <div className="socials">
@@ -307,7 +307,7 @@ const Home = () => {
                 src="https://vc-thumbnails.blr1.cdn.digitaloceanspaces.com/carousel/Team_Member/Arun.webp"
                 alt=""
               />
-              <h3>The OG Arun</h3>
+              <h3>Outgoing Arun</h3>
               <p>The Test Tribe</p>
               <p>Community</p>
               <div className="socials">
