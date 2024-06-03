@@ -216,6 +216,14 @@ const Reports = () => {
     setAllReports([]);
   };
 
+  useEffect(() => {
+    if (showAuthorsPopup || showSectorsPopup || showFilter) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+  }, [showAuthorsPopup, showSectorsPopup, showFilter]);
+
   if (loadingAuthors || loadingReports) {
     return (
       <div className="loader-section">
@@ -400,9 +408,13 @@ const Reports = () => {
             ))}
           </div>
           <div className="pagination">
-            <div className="load-more">
-              <button onClick={handleLoadMore}>Load More</button>
-            </div>
+            {allReports.length === 0 ? (
+              <div className="no-more-reports">No (more) reports. Please <a href="/contact"> contact us </a> to suggest if we have missed any.</div>
+            ) : (
+              <div className="load-more">
+                <button onClick={handleLoadMore}>Load More</button>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -18,6 +18,10 @@ const Navigation = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <div className={styles.header}>
       <div className={styles.container}>
@@ -25,9 +29,11 @@ const Navigation = () => {
           &#9776;
         </div>
         <div className={styles.logo}>
-          <img src="https://svgshare.com/i/14d2.svg" alt="" />
+          <Link style={brandStyle} to="/" onClick={closeMobileMenu}>
+            <img src="https://svgshare.com/i/14d2.svg" alt="" />
+          </Link>
           <h1>
-            <Link style={brandStyle} to="/">
+            <Link style={brandStyle} to="/" onClick={closeMobileMenu}>
               The VC Project
             </Link>
           </h1>
@@ -38,27 +44,25 @@ const Navigation = () => {
           }`}
         >
           <span>
-            <Link style={brandStyle} to="/">
+            <Link style={brandStyle} to="/" onClick={closeMobileMenu}>
               Home
             </Link>
           </span>
           <span>
-            <Link style={brandStyle} to="/contact">
+            <Link style={brandStyle} to="/contact" onClick={closeMobileMenu}>
               Contact
             </Link>
           </span>
           <span>
-            <Link style={brandStyle} to="/faq">
+            <Link style={brandStyle} to="/faq" onClick={closeMobileMenu}>
               FAQs
             </Link>
           </span>
         </div>
         <div className="btn">
-        <button>
-          <Link style={btnStyle} to="/reports">
-            Reports
+          <Link style={btnStyle} to="/reports" onClick={closeMobileMenu}>
+            <button>Reports</button>
           </Link>
-        </button>
         </div>
       </div>
     </div>

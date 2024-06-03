@@ -146,15 +146,11 @@
   form button {
     padding: 10px;
     border: none;
-    background-color: #007bff;
+    background-color: #4343FF;
     color: white;
     cursor: pointer;
     margin: 0 auto;
 }
-  
-  form button:hover {
-    background-color: #0056b3;
-  }
   
 
   .closeButton {

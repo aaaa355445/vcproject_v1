@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./ReportCard.module.css";
 import { reportSubscribeEmail } from "../../Services/Api";
 
 const ReportCard = ({ report }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [email, setEmail] = useState("");
+  const popupRef = useRef(null);
+
   const authors = Array.isArray(report.author)
     ? report.author.join(", ")
     : report.author;
@@ -31,6 +33,24 @@ const ReportCard = ({ report }) => {
   const handleClosePopup = () => {
     setIsPopupOpen(false);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        handleClosePopup();
+      }
+    };
+
+    if (isPopupOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isPopupOpen]);
 
   return (
     <>
@@ -60,7 +80,7 @@ const ReportCard = ({ report }) => {
 
       {isPopupOpen && (
         <div className={styles.popup}>
-          <div className={styles.popupContent}>
+          <div className={styles.popupContent} ref={popupRef}>
             <button className={styles.closeButton} onClick={handleClosePopup}>
               &times;
             </button>
@@ -71,7 +91,7 @@ const ReportCard = ({ report }) => {
               />
             </div>
             <div className={styles.formSection}>
-              <p>Ayush request's your action to complete</p>
+              <p>Ayush requests your action to complete</p>
               <form onSubmit={handleFormSubmit}>
                 <label htmlFor="email">Email*</label>
                 <input
