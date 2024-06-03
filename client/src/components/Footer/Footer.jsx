@@ -15,7 +15,7 @@ const Footer = () => {
         <div className={styles.footerCompany}>
           <span>Company</span>
           <div className="cta">
-            <a href="/report">Reports</a>
+            <a href="/reports">Reports</a>
           </div>
         </div>
         <div className={styles.footerHelp}>

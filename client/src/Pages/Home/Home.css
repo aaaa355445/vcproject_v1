@@ -220,6 +220,7 @@
 .subscribe-section .subscribe-form form button {
   background-color: #4343ff;
   margin-top: 20px;
+  font-weight: normal;
 }
 
 .subscribe-section .subscribe-form input:focus {
@@ -330,6 +331,7 @@
     margin-top: 27px;
     display: flex;
     justify-content: center;
+    text-decoration: none;
   }
 
   .left span {
