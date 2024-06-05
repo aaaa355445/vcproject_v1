@@ -10,6 +10,7 @@ const ReportSubscribeController = require("./Controllers/reportSubscribeControll
 // Reports API
 router.post('/admin/add/report', ReportController.upload);
 router.get("/reports", ReportController.getReports);
+router.get("/years", ReportController.getYearCount);
 
 
 // Authors API

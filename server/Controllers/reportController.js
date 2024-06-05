@@ -92,7 +92,7 @@ class ReportController {
       }
 
       if (req.query.searchQuery) {
-        filters.title = { $regex: req.query.searchQuery, $options: "i" }; 
+        filters.title = { $regex: req.query.searchQuery, $options: "i" };
       }
 
       const reports = await reportModel
@@ -132,6 +132,23 @@ class ReportController {
       return res.status(500).json({ message: "Something went wrong!!" });
     }
   }
+
+  async getYearCount(req, res) {
+    try {
+      const yearlyCounts = await reportModel.aggregate([
+        { $group: { _id: "$year", count: { $sum: 1 } } },
+        { $sort: { _id: 1 } },
+      ]);
+  
+      const result = yearlyCounts.map(({ _id, count }) => ({ year: _id.toString(), totalReport: count }));
+  
+      return res.json(result);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Something went wrong" });
+    }
+  }
+  
 }
 
 module.exports = new ReportController();

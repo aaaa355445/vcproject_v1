@@ -37,8 +37,34 @@ class SubsectorController {
       if (!sectorIds || !Array.isArray(sectorIds) || sectorIds.length === 0) {
         return res.status(400).json({ message: "Sector IDs are required and should be an array!" });
       }
-  
-      const subsectors = await subsectorModel.find({ sid: { $in: sectorIds } }).sort({name:1});
+
+      const normalizedSectorIds = sectorIds.map(id => Number(id));  
+
+      const subsectors = await subsectorModel.aggregate([
+        {
+          $match: {
+            sid: { $in: normalizedSectorIds }
+          }
+        },
+        {
+          $lookup: {
+            from: "report",
+            localField: "ssid",
+            foreignField: "subSector",
+            as: "reports",
+          },
+        },
+        {
+          $project: {
+            ssid: 1,
+            name: 1,
+            totalReports: { $size: "$reports" },
+          },
+        },
+        {
+          $sort: { name: 1 }
+        }
+      ]);
   
       return res.status(200).json({
         subsectors,

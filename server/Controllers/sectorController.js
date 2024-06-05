@@ -26,7 +26,26 @@ class SectorController {
 
   async getAllSectors(req, res) {
     try {
-      const sectors = await sectorModel.find().sort({name:1});
+      const sectors = await sectorModel.aggregate([
+        {
+          $lookup: {
+            from: "report",
+            localField: "sid",
+            foreignField: "sector",
+            as: "reports",
+          },
+        },
+        {
+          $project: {
+            sid: 1,
+            name: 1,
+            totalReports: { $size: "$reports" },
+          },
+        },
+        {
+          $sort: { name: 1 },
+        },
+      ]);
       return res.status(200).json({
         sectors
       });

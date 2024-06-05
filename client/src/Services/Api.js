@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "https://thevcproject.in/api";
+// const API_URL = "https://thevcproject.in/api";
+const API_URL = "http://localhost:5500"
 
 export const getAuthors = async () => {
   try {
@@ -82,6 +83,16 @@ export const getSubSectors = async (sectorIds) => {
   try {
     const response = await axios.post(`${API_URL}/sector/subsector`, { sectorIds });
     return response.data.subsectors;
+  } catch (error) {
+    console.error('Error fetching subsectors:', error);
+    throw error;
+  }
+};
+
+export const getYearAndCount = async () => {
+  try{
+    const response = await axios.get(`${API_URL}/years`);
+    return response.data;
   } catch (error) {
     console.error('Error fetching subsectors:', error);
     throw error;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import styles from "./Reports.module.css";
 import ReportCard from "../../components/ReportCard/ReportCard";
 import {
@@ -6,6 +6,7 @@ import {
   getAuthors,
   getSectors,
   getSubSectors,
+  getYearAndCount
 } from "../../Services/Api";
 import { ThreeCircles } from "react-loader-spinner";
 import "./Reports.css";
@@ -34,9 +35,12 @@ const Reports = () => {
   const [selectedSubSectors, setSelectedSubSectors] = useState({});
 
   const [showFilter, setShowFilter] = useState(false);
+  const [showSearchPopup, setShowSearchPopup] = useState(false);
+  const [years, setYears] = useState([])
 
   const handleFilterClick = () => {
-    setShowFilter(true);
+    setShowFilter(!showFilter);
+    setShowSearchPopup(!showFilter);
   };
 
   const handleCloseFilter = () => {
@@ -46,6 +50,7 @@ const Reports = () => {
   const handleApplyFilter = () => {
     // Apply filter logic
     setShowFilter(false);
+    setShowSearchPopup(false)
   };
 
   useEffect(() => {
@@ -76,7 +81,6 @@ const Reports = () => {
       if (selectedSectorIds.length > 0) {
         try {
           const data = await getSubSectors(selectedSectorIds);
-          console.log(data, "sub sectorrr");
           setSubsectors(data);
           setVisibleSubsectors(true);
         } catch (error) {
@@ -88,9 +92,19 @@ const Reports = () => {
       }
     };
 
+    const fetchYearAndCount = async () => {
+      try {
+        const data = await getYearAndCount();
+        setYears(data);
+      } catch (err) {
+        console.error("Error fetching years:", err);
+      }
+    };
+
     fetchSubSectors();
     fetchAuthors();
     fetchSectors();
+    fetchYearAndCount();
   }, [selectedSectors]);
 
   useEffect(() => {
@@ -168,7 +182,6 @@ const Reports = () => {
       [aid]: !prev[aid],
     }));
     setPage(1);
-    setAllReports([]);
   };
 
   const handleYearCheckboxChange = (year) => {
@@ -210,10 +223,19 @@ const Reports = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+  const inputRef = useRef();
+
+  const handleSearchMobile = () => {
+    setShowSearchPopup(!showSearchPopup);
+    setShowFilter(false);
+  };
+
+  const handleSearchClick = () => {
+    const query = inputRef.current.value;
     setPage(1);
     setAllReports([]);
+    setSearchQuery(query);
+    inputRef.current.value = "";
   };
 
   useEffect(() => {
@@ -242,8 +264,6 @@ const Reports = () => {
     return <p>Error loading reports: {errorReports.message}</p>;
   }
 
-  const years = Array.from({ length: 8 }, (_, i) => 2017 + i);
-
   return (
     <div className="reports-section">
       <div className="upersection">
@@ -252,16 +272,15 @@ const Reports = () => {
             <span style={{ fontWeight: "bold" }}>FILTERS</span>
           </div>
           <div className="rightSection">
-            {/* <div className="searchSection">
+            <div className="searchSection">
               <input
                 type="text"
                 name="report"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={handleSearchChange}
+                placeholder={searchQuery ? searchQuery : "Search..."}
+                ref={inputRef}
               />
+              <button onClick={handleSearchClick}>Search</button>
             </div>
-            <span>Sort By</span> */}
           </div>
         </div>
       </div>
@@ -273,13 +292,13 @@ const Reports = () => {
               <h4>Select Year</h4>
               <div className="yearData">
                 {years.map((year) => (
-                  <span key={year} className="yearCheckbox">
+                  <span key={year.year} className="yearCheckbox">
                     <input
                       type="checkbox"
-                      checked={selectedYears[year] || false}
-                      onChange={() => handleYearCheckboxChange(year)}
+                      checked={selectedYears[year.year] || false}
+                      onChange={() => handleYearCheckboxChange(year.year)}
                     />
-                    <p>{year}</p>
+                    <p>{year.year} ({year.totalReport})</p>
                   </span>
                 ))}
               </div>
@@ -295,7 +314,7 @@ const Reports = () => {
                       checked={selectedAuthors[author.aid] || false}
                       onChange={() => handleAuthorCheckboxChange(author.aid)}
                     />{" "}
-                    {author.name}
+                    {author.name} ({author.totalReports})
                   </span>
                 ))}
               </div>
@@ -323,7 +342,7 @@ const Reports = () => {
                               handleAuthorCheckboxChange(author.aid)
                             }
                           />{" "}
-                          {author.name}
+                          {author.name} ({author.totalReports})
                         </span>
                       ))}
                     </div>
@@ -342,7 +361,9 @@ const Reports = () => {
                       checked={selectedSectors[sector.sid] || false}
                       onChange={() => handleSectorCheckboxChange(sector.sid)}
                     />
-                    <p>{sector.name}</p>
+                    <p>
+                      {sector.name} ({sector.totalReports})
+                    </p>
                   </span>
                 ))}
               </div>
@@ -370,7 +391,9 @@ const Reports = () => {
                               handleSectorCheckboxChange(sector.sid)
                             }
                           />
-                          <p>{sector.name}</p>
+                          <p>
+                            {sector.name} ({sector.totalReports})
+                          </p>
                         </span>
                       ))}
                     </div>
@@ -392,7 +415,9 @@ const Reports = () => {
                           handleSubSectorCheckboxChange(subsector.ssid)
                         }
                       />
-                      <p>{subsector.name}</p>
+                      <p>
+                        {subsector.name} ({subsector.totalReports})
+                      </p>
                     </span>
                   ))}
                 </div>
@@ -409,7 +434,10 @@ const Reports = () => {
           </div>
           <div className="pagination">
             {allReports.length === 0 ? (
-              <div className="no-more-reports">No (more) reports. Please <a href="/contact"> contact us </a> to suggest if we have missed any.</div>
+              <div className="no-more-reports">
+                No (more) reports. Please <a href="/contact"> contact us </a> to
+                suggest if we have missed any.
+              </div>
             ) : (
               <div className="load-more">
                 <button onClick={handleLoadMore}>Load More</button>
@@ -420,11 +448,8 @@ const Reports = () => {
       </div>
 
       <div className="mobileBar">
-        <div
-          className="mobileBarLeft"
-          onClick={showFilter ? handleCloseFilter : null}
-        >
-          {showFilter ? "Close" : "Sort"}
+        <div className="mobileBarLeft" onClick={handleSearchMobile}>
+          {showSearchPopup ? "Close" : "Search"}
         </div>
         <div className="mobileBarDivider"></div>
         <div
@@ -434,6 +459,22 @@ const Reports = () => {
           {showFilter ? "Apply" : "Filter"}
         </div>
       </div>
+
+      {showSearchPopup && (
+        <div className="searchPopup">
+          <div className="searchInput">
+            <div className="searchSectionMobile">
+              <input
+                type="text"
+                name="report"
+                placeholder={searchQuery ? searchQuery : "Search..."}
+                ref={inputRef}
+              />
+              <button onClick={handleSearchClick}>Search</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showFilter && (
         <div className="mobileFilterPopup">
@@ -471,7 +512,9 @@ const Reports = () => {
                         checked={selectedSectors[sector.sid] || false}
                         onChange={() => handleSectorCheckboxChange(sector.sid)}
                       />
-                      <p>{sector.name}</p>
+                      <p>
+                        {sector.name} ({sector.totalReports})
+                      </p>
                     </span>
                   ))}
                 </div>
@@ -490,7 +533,9 @@ const Reports = () => {
                             handleSubSectorCheckboxChange(subsector.ssid)
                           }
                         />
-                        <p>{subsector.name}</p>
+                        <p>
+                          {subsector.name} ({subsector.totalReports})
+                        </p>
                       </span>
                     ))}
                   </div>
@@ -507,7 +552,7 @@ const Reports = () => {
                         checked={selectedAuthors[author.aid] || false}
                         onChange={() => handleAuthorCheckboxChange(author.aid)}
                       />{" "}
-                      {author.name}
+                      {author.name} ({author.totalReports})
                     </span>
                   ))}
                 </div>
