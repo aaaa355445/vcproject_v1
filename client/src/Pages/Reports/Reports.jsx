@@ -6,7 +6,7 @@ import {
   getAuthors,
   getSectors,
   getSubSectors,
-  getYearAndCount
+  getYearAndCount,
 } from "../../Services/Api";
 import { ThreeCircles } from "react-loader-spinner";
 import "./Reports.css";
@@ -36,7 +36,7 @@ const Reports = () => {
 
   const [showFilter, setShowFilter] = useState(false);
   const [showSearchPopup, setShowSearchPopup] = useState(false);
-  const [years, setYears] = useState([])
+  const [years, setYears] = useState([]);
 
   const handleFilterClick = () => {
     setShowFilter(!showFilter);
@@ -50,7 +50,7 @@ const Reports = () => {
   const handleApplyFilter = () => {
     // Apply filter logic
     setShowFilter(false);
-    setShowSearchPopup(false)
+    setShowSearchPopup(false);
   };
 
   useEffect(() => {
@@ -298,7 +298,9 @@ const Reports = () => {
                       checked={selectedYears[year.year] || false}
                       onChange={() => handleYearCheckboxChange(year.year)}
                     />
-                    <p>{year.year} ({year.totalReport})</p>
+                    <p>
+                      {year.year} ({year.totalReport})
+                    </p>
                   </span>
                 ))}
               </div>
@@ -490,13 +492,15 @@ const Reports = () => {
                 <h4>Select Year</h4>
                 <div className="yearData">
                   {years.map((year) => (
-                    <span key={year} className="yearCheckbox">
+                    <span key={year.year} className="yearCheckbox">
                       <input
                         type="checkbox"
-                        checked={selectedYears[year] || false}
-                        onChange={() => handleYearCheckboxChange(year)}
+                        checked={selectedYears[year.year] || false}
+                        onChange={() => handleYearCheckboxChange(year.year)}
                       />
-                      <p>{year}</p>
+                      <p>
+                        {year.year} ({year.totalReport})
+                      </p>
                     </span>
                   ))}
                 </div>

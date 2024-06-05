@@ -345,6 +345,7 @@ input[type="checkbox"] {
   .searchInput .searchSectionMobile input {
     padding: 6px 12px;
     margin-top: 20px;
+    border-radius: 0px;
   }
 
   .mobileFilterPopup {
