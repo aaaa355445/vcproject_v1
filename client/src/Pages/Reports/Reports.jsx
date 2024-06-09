@@ -12,33 +12,46 @@ import { ThreeCircles } from "react-loader-spinner";
 import "./Reports.css";
 
 const Reports = () => {
+  // Years State
+  const [selectedYears, setSelectedYears] = useState({});
+  const [years, setYears] = useState([]);
+
+  // Authors State  
   const [authors, setAuthors] = useState([]);
   const [visibleAuthors, setVisibleAuthors] = useState(8);
   const [loadingAuthors, setLoadingAuthors] = useState(true);
   const [errorAuthors, setErrorAuthors] = useState(null);
   const [selectedAuthors, setSelectedAuthors] = useState({});
-  const [selectedYears, setSelectedYears] = useState({});
   const [showAuthorsPopup, setShowAuthorsPopup] = useState(false);
+
+  // Sector State
   const [sectors, setSectors] = useState([]);
   const [visibleSectors, setVisibleSectors] = useState(8);
+  const [selectedSectors, setSelectedSectors] = useState({});
   const [showSectorsPopup, setShowSectorsPopup] = useState(false);
+
+  // Sub Sector State
+  const [subsectors, setSubsectors] = useState([]);
+  const [visibleSubsectors, setVisibleSubsectors] = useState(8);
+  const [selectedSubSectors, setSelectedSubSectors] = useState({});
+  const [showSubSectorsPopup, setShowSubSectorsPopup] = useState(false);
+
+
+  // Reports State
   const [reports, setReports] = useState([]);
   const [loadingReports, setLoadingReports] = useState(true);
   const [errorReports, setErrorReports] = useState(null);
-  const [page, setPage] = useState(1);
   const [allReports, setAllReports] = useState([]);
+
+  // Search State
   const [searchQuery, setSearchQuery] = useState("");
-
-  const [subsectors, setSubsectors] = useState([]);
-  const [selectedSectors, setSelectedSectors] = useState({});
-  const [visibleSubsectors, setVisibleSubsectors] = useState(false);
-  const [selectedSubSectors, setSelectedSubSectors] = useState({});
-
-  const [showFilter, setShowFilter] = useState(false);
-  const [showSearchPopup, setShowSearchPopup] = useState(false);
-  const [years, setYears] = useState([]);
-
   const [searchValue, setSearchValue] = useState("");
+  const [showSearchPopup, setShowSearchPopup] = useState(false);
+
+  // Other state
+  const [page, setPage] = useState(1);
+  const [showFilter, setShowFilter] = useState(false);
+
 
   const handleFilterClick = () => {
     setShowFilter(!showFilter);
@@ -77,22 +90,33 @@ const Reports = () => {
     };
 
     const fetchSubSectors = async () => {
-      const selectedSectorIds = Object.keys(selectedSectors).filter(
-        (sid) => selectedSectors[sid]
-      );
-      if (selectedSectorIds.length > 0) {
-        try {
-          const data = await getSubSectors(selectedSectorIds);
-          setSubsectors(data);
-          setVisibleSubsectors(true);
-        } catch (error) {
-          console.error("Error fetching subsectors:", error);
-        }
-      } else {
-        setSubsectors([]);
-        setVisibleSubsectors(false);
+      try {
+        const data = await getSubSectors();
+        setSubsectors(data);
+      } catch (err) {
+        console.error("Error fetching sectors:", err);
       }
     };
+
+
+
+    // const fetchSubSectors = async () => {
+    //   const selectedSectorIds = Object.keys(selectedSectors).filter(
+    //     (sid) => selectedSectors[sid]
+    //   );
+    //   if (selectedSectorIds.length > 0) {
+    //     try {
+    //       const data = await getSubSectors(selectedSectorIds);
+    //       setSubsectors(data);
+    //       setVisibleSubsectors(true);
+    //     } catch (error) {
+    //       console.error("Error fetching subsectors:", error);
+    //     }
+    //   } else {
+    //     setSubsectors([]);
+    //     setVisibleSubsectors(false);
+    //   }
+    // };
 
     const fetchYearAndCount = async () => {
       try {
@@ -219,6 +243,10 @@ const Reports = () => {
 
   const toggleSectorsPopup = () => {
     setShowSectorsPopup(!showSectorsPopup);
+  };
+
+  const toggleSubSectorsPopup = () => {
+    setShowSubSectorsPopup(!showSubSectorsPopup);
   };
 
   const handleLoadMore = () => {
@@ -426,7 +454,58 @@ const Reports = () => {
               )}
             </div>
 
-            {visibleSubsectors && (
+            <div className="category">
+            <h4>Sub Categories</h4>
+              <div className="categoryData">
+                {subsectors.slice(0, visibleSubsectors).map((subsector) => (
+                  <span key={subsector.ssid} className="sectorCheckbox">
+                    <input
+                      type="checkbox"
+                      checked={selectedSubSectors[subsector.ssid] || false}
+                      onChange={() => handleSubSectorCheckboxChange(subsector.ssid)}
+                    />
+                    <p>
+                      {subsector.name} ({subsector.totalReports})
+                    </p>
+                  </span>
+                ))}
+              </div>
+              <div className="loadmore">
+                {visibleSubsectors < subsectors.length && (
+                  <span onClick={toggleSubSectorsPopup}>+25 more</span>
+                )}
+              </div>
+              {showSubSectorsPopup && (
+                <div className="popup">
+                  <div className="popup-content">
+                    <button
+                      className="close-popup"
+                      onClick={toggleSubSectorsPopup}
+                    >
+                      &times;
+                    </button>
+                    <div className="popup-sectors">
+                      {subsectors.map((subsector) => (
+                        <span key={subsector.ssid} className="popup-sectorCheckbox">
+                          <input
+                            type="checkbox"
+                            checked={selectedSubSectors[subsector.ssid] || false}
+                            onChange={() =>
+                              handleSubSectorCheckboxChange(subsector.ssid)
+                            }
+                          />
+                          <p>
+                            {subsector.name} ({subsector.totalReports})
+                          </p>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* {visibleSubsectors && (
               <div className="subCategory">
                 <h4>Sub Categories</h4>
                 <div className="subCategoryData">
@@ -446,7 +525,7 @@ const Reports = () => {
                   ))}
                 </div>
               </div>
-            )}
+            )} */}
           </div>
         </div>
 

@@ -23,6 +23,16 @@ export const getSectors = async () => {
   }
 };
 
+export const getSubSectors = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/subsector`);
+    return response.data.subSectors;
+  } catch (error) {
+    console.error('Error fetching sectors:', error);
+    throw error;
+  }
+};
+
 export const subscribeEmail = async (email) => {
   try {
     const response = await axios.post(`${API_URL}/subscribe`, { email });
@@ -79,15 +89,15 @@ export const getReports = async (page = 1, year, author, searchQuery, sector, su
   }
 };
 
-export const getSubSectors = async (sectorIds) => {
-  try {
-    const response = await axios.post(`${API_URL}/sector/subsector`, { sectorIds });
-    return response.data.subsectors;
-  } catch (error) {
-    console.error('Error fetching subsectors:', error);
-    throw error;
-  }
-};
+// export const getSubSectors = async (sectorIds) => {
+//   try {
+//     const response = await axios.post(`${API_URL}/sector/subsector`, { sectorIds });
+//     return response.data.subsectors;
+//   } catch (error) {
+//     console.error('Error fetching subsectors:', error);
+//     throw error;
+//   }
+// };
 
 export const getYearAndCount = async () => {
   try{

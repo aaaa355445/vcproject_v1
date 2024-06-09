@@ -68,7 +68,7 @@
   flex-direction: column;
   gap: 30px;
   overflow: auto;
-  height: 100vh;
+  height: 171vh;
 }
 
 .rightReports::-webkit-scrollbar {
