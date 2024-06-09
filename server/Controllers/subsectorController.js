@@ -84,6 +84,46 @@ class SubsectorController {
       return res.status(500).json({ message: "Something went wrong!!" });
     }
   }
+
+  async getMatchingSubSector(searchRegex) {
+    try{
+      return await subsectorModel.find({ name: searchRegex });
+    } catch (err) {
+      console.log(err);
+      throw new Error("Something went wrong!!");
+    }
+  }
+
+  async getAllSubSectors(req, res) {
+    try {
+      const subSectors = await subsectorModel.aggregate([
+        {
+          $lookup: {
+            from: "report",
+            localField: "ssid",
+            foreignField: "subSector",
+            as: "reports",
+          },
+        },
+        {
+          $project: {
+            ssid: 1,
+            name: 1,
+            totalReports: { $size: "$reports" },
+          },
+        },
+        {
+          $sort: { name: 1 },
+        },
+      ]);
+      return res.status(200).json({
+        subSectors
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ message: "Something went wrong!!" });
+    }
+  };
 }
 
 module.exports = new SubsectorController();

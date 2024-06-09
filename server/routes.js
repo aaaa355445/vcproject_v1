@@ -24,6 +24,7 @@ router.post('/sector/subsector', SubsectorController.getSubSectorsBySectorIds);
 
 // Subcategories API
 router.post('/admin/add/subsector', SubsectorController.upload);
+router.get("/subsector", SubsectorController.getAllSubSectors);
 
 // Subscribe API
 router.post('/subscribe', SubscribeController.saveEmail);

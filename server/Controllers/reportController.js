@@ -92,7 +92,24 @@ class ReportController {
       }
 
       if (req.query.searchQuery) {
-        filters.title = { $regex: req.query.searchQuery, $options: "i" };
+        const searchRegex = { $regex: req.query.searchQuery, $options: "i" };
+        const matchingAuthors = await authorController.getMatchingAuthor(searchRegex);
+        const matchingSectors = await sectorController.getMatchingSector(searchRegex);
+        const matchingSubSectors = await subsectorController.getMatchingSubSector(searchRegex);
+
+
+        const authorIds = matchingAuthors.map((author) => author.aid);
+        const sectorIds = matchingSectors.map((sector) => sector.sid);
+        const subSectorIds = matchingSubSectors.map((subSector) => subSector.ssid);
+
+        filters.$or = [
+          { title: searchRegex },
+          { author: { $in: authorIds } },
+          { sector: { $in: sectorIds } },
+          { subSector: { $in: subSectorIds } }
+        ];
+
+        console.log(filters, "filter")
       }
 
       const reports = await reportModel

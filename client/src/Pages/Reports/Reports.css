@@ -327,41 +327,41 @@ input[type="checkbox"] {
   }
 
   .searchPopup {
-    display: block;
+    display: flex;
     position: fixed;
-    height: 22vh;
-    bottom: 0%;
+    height: 70px;
+    bottom: 70px;
     background-color: white;
     width: 100%;
     box-shadow: 0px 0px 10px rgb(110, 110, 110);
-  }
-
-  .searchInput {
-    display: flex;
+    z-index: 99;
     justify-content: center;
     align-items: center;
   }
 
+  .searchInput {
+    width: 90%;
+  }
+
   .searchInput .searchSectionMobile input {
     padding: 6px 12px;
-    margin-top: 20px;
+    margin-top: 0px;
     border-radius: 0px;
+    width: 90%;
   }
 
   .mobileFilterPopup {
     position: fixed;
-    height: 100vh;
+    height: 100%;
     background-color: white;
-    bottom: 0%;
     width: 100%;
     z-index: 99;
     overflow: auto;
-    padding-bottom: 150px;
-  }
+    top: 70px;
+}
 
   .filterScreen {
-    padding-top: 100px !important;
-    height: 100%;
+    padding-top: 0px !important;
   }
 
   .mobileBar {
@@ -406,7 +406,7 @@ input[type="checkbox"] {
   }
 
   .filterData {
-    padding: 120px 20px;
+    padding: 20px 20px;
   }
 
   .year,

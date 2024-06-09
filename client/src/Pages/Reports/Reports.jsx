@@ -38,6 +38,8 @@ const Reports = () => {
   const [showSearchPopup, setShowSearchPopup] = useState(false);
   const [years, setYears] = useState([]);
 
+  const [searchValue, setSearchValue] = useState("");
+
   const handleFilterClick = () => {
     setShowFilter(!showFilter);
     setShowSearchPopup(!showFilter);
@@ -223,19 +225,37 @@ const Reports = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
-  const inputRef = useRef();
-
   const handleSearchMobile = () => {
     setShowSearchPopup(!showSearchPopup);
     setShowFilter(false);
   };
 
+  const inputRef = useRef();
+
+  useEffect(() => {
+    let handler;
+    if (searchValue) {
+      handler = setTimeout(() => {
+        setPage(1)
+        setAllReports([])
+        setSearchQuery(searchValue);
+      }, 800)
+    }
+
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchValue]);
+
+  const handleInputChange = (e) => {
+    setSearchValue(e.target.value);
+  };
+
   const handleSearchClick = () => {
-    const query = inputRef.current.value;
     setPage(1);
     setAllReports([]);
-    setSearchQuery(query);
-    inputRef.current.value = "";
+    setSearchQuery(searchValue);
   };
 
   useEffect(() => {
@@ -276,10 +296,12 @@ const Reports = () => {
               <input
                 type="text"
                 name="report"
-                placeholder={searchQuery ? searchQuery : "Search..."}
+                value={searchValue}
+                onChange={handleInputChange}
                 ref={inputRef}
+                placeholder="Search..."
               />
-              <button onClick={handleSearchClick}>Search</button>
+              {/* <button onClick={handleSearchClick}>Search</button> */}
             </div>
           </div>
         </div>
@@ -469,10 +491,11 @@ const Reports = () => {
               <input
                 type="text"
                 name="report"
-                placeholder={searchQuery ? searchQuery : "Search..."}
+                value={searchValue}
+                onChange={handleInputChange}
                 ref={inputRef}
+                placeholder="Search..."
               />
-              <button onClick={handleSearchClick}>Search</button>
             </div>
           </div>
         </div>

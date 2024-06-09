@@ -64,6 +64,15 @@ class AuthorController {
       throw new Error("Something went wrong!!");
     }
   }
+
+  async getMatchingAuthor(searchRegex) {
+    try{
+      return await authorModel.find({ name: searchRegex });
+    } catch (err) {
+      console.log(err);
+      throw new Error("Something went wrong!!");
+    }
+  }
 }
 
 module.exports = new AuthorController();

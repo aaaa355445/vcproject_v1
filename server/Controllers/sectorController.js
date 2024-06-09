@@ -65,6 +65,15 @@ class SectorController {
     }
   }
 
+  async getMatchingSector(searchRegex) {
+    try{
+      return await sectorModel.find({ name: searchRegex });
+    } catch (err) {
+      console.log(err);
+      throw new Error("Something went wrong!!");
+    }
+  }
+
 }
 
 module.exports = new SectorController();
