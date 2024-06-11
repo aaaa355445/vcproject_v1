@@ -108,8 +108,6 @@ class ReportController {
           { sector: { $in: sectorIds } },
           { subSector: { $in: subSectorIds } }
         ];
-
-        console.log(filters, "filter")
       }
 
       const reports = await reportModel

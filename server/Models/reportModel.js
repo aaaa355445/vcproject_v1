@@ -11,7 +11,7 @@ const reportSchema = new Schema({
     link: { type: String, required: true },
     year: { type: Number, required: true, index: true },
     month: { type: String, required: true }
-})
+}, { timestamps: true });
 
 
 module.exports = mongoose.model('Report', reportSchema, 'report');

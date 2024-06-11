@@ -45,7 +45,8 @@ export const subscribeEmail = async (email) => {
 
 export const reportSubscribeEmail = async (email) => {
   try {
-    const response = await axios.post(`${API_URL}/report-subscribe`, { email });
+    let guestId = localStorage.getItem('guestUserId');
+    const response = await axios.post(`${API_URL}/report-subscribe`, { email, guestId });
     return response.data;
   } catch (error) {
     console.error("Error subscribing email:", error);
@@ -105,6 +106,27 @@ export const getYearAndCount = async () => {
     return response.data;
   } catch (error) {
     console.error('Error fetching subsectors:', error);
+    throw error;
+  }
+};
+
+export const generateGuestUserId = () => {
+  let guestUserId = localStorage.getItem('guestUserId');
+  if (!guestUserId) {
+      guestUserId = `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('guestUserId', guestUserId);
+  }
+  return guestUserId;
+};
+
+export const checkEmailForGuestUser = async (guestId) => {
+  try {
+    const response = await axios.get(`${API_URL}/check-email`, {
+      params: { guestId },
+    });
+    return response.data.emailExists;
+  } catch (error) {
+    console.error("Error checking email for guest user:", error);
     throw error;
   }
 };

@@ -42,6 +42,7 @@ const Reports = () => {
   const [loadingReports, setLoadingReports] = useState(true);
   const [errorReports, setErrorReports] = useState(null);
   const [allReports, setAllReports] = useState([]);
+  
 
   // Search State
   const [searchQuery, setSearchQuery] = useState("");

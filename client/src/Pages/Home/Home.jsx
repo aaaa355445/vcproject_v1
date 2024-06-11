@@ -354,7 +354,7 @@ const Home = () => {
             <div className="gridmem">
               <img
                 className="memberImg"
-                src="https://vc-thumbnails.blr1.cdn.digitaloceanspaces.com/carousel/Team_Member/Chetanya_TeamMember.webp"
+                src="https://vc-thumbnails.blr1.cdn.digitaloceanspaces.com/carousel/Team_Member/CHETANYA.WEBP"
                 alt=""
               />
               <h3>Reliable Chetanya</h3>

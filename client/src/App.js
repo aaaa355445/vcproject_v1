@@ -6,8 +6,13 @@ import Reports from './Pages/Reports/Reports';
 import Footer from './components/Footer/Footer';
 import Contact from './Pages/Contact/Contact';
 import FaqPage from './Pages/Faq/FaqPage';
+import React, { useEffect } from 'react';
+import { generateGuestUserId } from './Services/Api';
 
 function App() {
+  useEffect(() => {
+    generateGuestUserId();
+  }, []);
   return (
     <BrowserRouter>
     <Navigation /> 

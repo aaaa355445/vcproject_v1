@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./ReportCard.module.css";
-import { reportSubscribeEmail } from "../../Services/Api";
+import { reportSubscribeEmail, checkEmailForGuestUser } from "../../Services/Api";
 
 const ReportCard = ({ report }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -11,9 +11,20 @@ const ReportCard = ({ report }) => {
     ? report.author.join(", ")
     : report.author;
 
-  const handleCardClick = (e) => {
+
+  const handleCardClick = async (e) => {
     e.preventDefault();
-    setIsPopupOpen(true);
+    try {
+      const guestId = localStorage.getItem('guestUserId');
+      const emailExists = await checkEmailForGuestUser(guestId);
+      if (emailExists) {
+        window.open(report.link, "_blank", "noopener,noreferrer");
+      } else {
+        setIsPopupOpen(true);
+      }
+    } catch (error) {
+      console.error("Error checking email for guest user:", error);
+    }
   };
 
   const handleFormSubmit = async (e) => {
