@@ -16,7 +16,7 @@ const Reports = () => {
   const [selectedYears, setSelectedYears] = useState({});
   const [years, setYears] = useState([]);
 
-  // Authors State  
+  // Authors State
   const [authors, setAuthors] = useState([]);
   const [visibleAuthors, setVisibleAuthors] = useState(8);
   const [loadingAuthors, setLoadingAuthors] = useState(true);
@@ -36,13 +36,11 @@ const Reports = () => {
   const [selectedSubSectors, setSelectedSubSectors] = useState({});
   const [showSubSectorsPopup, setShowSubSectorsPopup] = useState(false);
 
-
   // Reports State
   const [reports, setReports] = useState([]);
   const [loadingReports, setLoadingReports] = useState(true);
   const [errorReports, setErrorReports] = useState(null);
   const [allReports, setAllReports] = useState([]);
-  
 
   // Search State
   const [searchQuery, setSearchQuery] = useState("");
@@ -52,7 +50,7 @@ const Reports = () => {
   // Other state
   const [page, setPage] = useState(1);
   const [showFilter, setShowFilter] = useState(false);
-
+  const [selectedFilter, setSelectedFilter] = useState("year");
 
   const handleFilterClick = () => {
     setShowFilter(!showFilter);
@@ -62,6 +60,10 @@ const Reports = () => {
   const handleCloseFilter = () => {
     setShowFilter(false);
   };
+
+  const handleFilterChange = (filter) => {
+    setSelectedFilter(filter);
+  }
 
   const handleApplyFilter = () => {
     // Apply filter logic
@@ -98,8 +100,6 @@ const Reports = () => {
         console.error("Error fetching sectors:", err);
       }
     };
-
-
 
     // const fetchSubSectors = async () => {
     //   const selectedSectorIds = Object.keys(selectedSectors).filter(
@@ -265,12 +265,11 @@ const Reports = () => {
     let handler;
     if (searchValue) {
       handler = setTimeout(() => {
-        setPage(1)
-        setAllReports([])
+        setPage(1);
+        setAllReports([]);
         setSearchQuery(searchValue);
-      }, 800)
+      }, 800);
     }
-
 
     return () => {
       clearTimeout(handler);
@@ -456,14 +455,16 @@ const Reports = () => {
             </div>
 
             <div className="category">
-            <h4>Sub Categories</h4>
+              <h4>Sub Categories</h4>
               <div className="categoryData">
                 {subsectors.slice(0, visibleSubsectors).map((subsector) => (
                   <span key={subsector.ssid} className="sectorCheckbox">
                     <input
                       type="checkbox"
                       checked={selectedSubSectors[subsector.ssid] || false}
-                      onChange={() => handleSubSectorCheckboxChange(subsector.ssid)}
+                      onChange={() =>
+                        handleSubSectorCheckboxChange(subsector.ssid)
+                      }
                     />
                     <p>
                       {subsector.name} ({subsector.totalReports})
@@ -487,10 +488,15 @@ const Reports = () => {
                     </button>
                     <div className="popup-sectors">
                       {subsectors.map((subsector) => (
-                        <span key={subsector.ssid} className="popup-sectorCheckbox">
+                        <span
+                          key={subsector.ssid}
+                          className="popup-sectorCheckbox"
+                        >
                           <input
                             type="checkbox"
-                            checked={selectedSubSectors[subsector.ssid] || false}
+                            checked={
+                              selectedSubSectors[subsector.ssid] || false
+                            }
                             onChange={() =>
                               handleSubSectorCheckboxChange(subsector.ssid)
                             }
@@ -584,52 +590,73 @@ const Reports = () => {
       {showFilter && (
         <div className="mobileFilterPopup">
           <div className="filterScreen">
-            {/* <div className="filterHeading">
-              <span>Year</span>
-              <span>Authors</span>
-              <span>Sectors</span>
-              <span>Sub Sectors</span>
-            </div> */}
+          <div className="filterHeading">
+              <span
+                className={selectedFilter === 'year' ? 'selected' : ''}
+                onClick={() => handleFilterChange('year')}
+              >
+                Year
+              </span>
+              <span
+                className={selectedFilter === 'authors' ? 'selected' : ''}
+                onClick={() => handleFilterChange('authors')}
+              >
+                Authors
+              </span>
+              <span
+                className={selectedFilter === 'sectors' ? 'selected' : ''}
+                onClick={() => handleFilterChange('sectors')}
+              >
+                Sectors
+              </span>
+              <span
+                className={selectedFilter === 'subsectors' ? 'selected' : ''}
+                onClick={() => handleFilterChange('subsectors')}
+              >
+                Sub Sectors
+              </span>
+            </div>
             <div className="filterData">
-              <div className="year">
-                <h4>Select Year</h4>
-                <div className="yearData">
-                  {years.map((year) => (
-                    <span key={year.year} className="yearCheckbox">
-                      <input
-                        type="checkbox"
-                        checked={selectedYears[year.year] || false}
-                        onChange={() => handleYearCheckboxChange(year.year)}
-                      />
-                      <p>
-                        {year.year} ({year.totalReport})
-                      </p>
-                    </span>
-                  ))}
+              {selectedFilter === "year" && (
+                <div className="year">
+                  <div className="yearData">
+                    {years.map((year) => (
+                      <span key={year.year} className="yearCheckbox">
+                        <input
+                          type="checkbox"
+                          checked={selectedYears[year.year] || false}
+                          onChange={() => handleYearCheckboxChange(year.year)}
+                        />
+                        <p>
+                          {year.year} ({year.totalReport})
+                        </p>
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-
-              <div className="category">
-                <h4>Sector</h4>
-                <div className="categoryData">
-                  {sectors.map((sector) => (
-                    <span key={sector.sid} className="popup-sectorCheckbox">
-                      <input
-                        type="checkbox"
-                        checked={selectedSectors[sector.sid] || false}
-                        onChange={() => handleSectorCheckboxChange(sector.sid)}
-                      />
-                      <p>
-                        {sector.name} ({sector.totalReports})
-                      </p>
-                    </span>
-                  ))}
+              )}
+              {selectedFilter === "sectors" && (
+                <div className="category">
+                  <div className="categoryData">
+                    {sectors.map((sector) => (
+                      <span key={sector.sid} className="popup-sectorCheckbox">
+                        <input
+                          type="checkbox"
+                          checked={selectedSectors[sector.sid] || false}
+                          onChange={() =>
+                            handleSectorCheckboxChange(sector.sid)
+                          }
+                        />
+                        <p>
+                          {sector.name} ({sector.totalReports})
+                        </p>
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-
-              {visibleSubsectors && (
+              )}
+              {selectedFilter === "subsectors" && (
                 <div className="subCategory">
-                  <h4>Sub Categories</h4>
                   <div className="subCategoryData">
                     {subsectors.map((subsector) => (
                       <span key={subsector.ssid} className="subsectorCheckbox">
@@ -648,22 +675,24 @@ const Reports = () => {
                   </div>
                 </div>
               )}
-
-              <div className="author">
-                <h4>Authors</h4>
-                <div className="authorsData">
-                  {authors.map((author) => (
-                    <span key={author.aid} className="popup-authorCheckbox">
-                      <input
-                        type="checkbox"
-                        checked={selectedAuthors[author.aid] || false}
-                        onChange={() => handleAuthorCheckboxChange(author.aid)}
-                      />{" "}
-                      {author.name} ({author.totalReports})
-                    </span>
-                  ))}
+              {selectedFilter === "authors" && (
+                <div className="author">
+                  <div className="authorsData">
+                    {authors.map((author) => (
+                      <span key={author.aid} className="popup-authorCheckbox">
+                        <input
+                          type="checkbox"
+                          checked={selectedAuthors[author.aid] || false}
+                          onChange={() =>
+                            handleAuthorCheckboxChange(author.aid)
+                          }
+                        />{" "}
+                        {author.name} ({author.totalReports})
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
