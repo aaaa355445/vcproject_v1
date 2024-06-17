@@ -16,8 +16,9 @@ class ReportController {
         link,
         year,
         month,
+        tags,
       } = req.body;
-
+  
       if (
         !rid ||
         !title ||
@@ -27,18 +28,19 @@ class ReportController {
         !image ||
         !link ||
         !year ||
-        !month
+        !month ||
+        !tags
       ) {
         return res.status(400).json({ message: "All fields are required!" });
       }
-
+  
       const existingReport = await reportModel.findOne({ rid });
       if (existingReport) {
         return res
           .status(400)
           .json({ message: "Report with this RID already exists!" });
       }
-
+  
       const newReport = new reportModel({
         rid,
         title,
@@ -49,10 +51,11 @@ class ReportController {
         link,
         year,
         month,
+        tags,
       });
-
+  
       const savedReport = await newReport.save();
-
+  
       return res.status(200).json({
         savedReport,
         message: "Report Added Successfully",
@@ -62,6 +65,7 @@ class ReportController {
       return res.status(500).json({ message: "Something went wrong!!" });
     }
   }
+  
 
   async getReports(req, res) {
     try {
@@ -106,7 +110,8 @@ class ReportController {
           { title: searchRegex },
           { author: { $in: authorIds } },
           { sector: { $in: sectorIds } },
-          { subSector: { $in: subSectorIds } }
+          { subSector: { $in: subSectorIds } },
+          { tags: { $elemMatch: { $regex: req.query.searchQuery, $options: "i" } } }
         ];
       }
 

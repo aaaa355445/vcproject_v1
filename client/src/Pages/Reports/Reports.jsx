@@ -63,7 +63,7 @@ const Reports = () => {
 
   const handleFilterChange = (filter) => {
     setSelectedFilter(filter);
-  }
+  };
 
   const handleApplyFilter = () => {
     // Apply filter logic
@@ -244,14 +244,11 @@ const Reports = () => {
   const inputRef = useRef();
 
   useEffect(() => {
-    let handler;
-    if (searchValue) {
-      handler = setTimeout(() => {
-        setPage(1);
-        setAllReports([]);
-        setSearchQuery(searchValue);
-      }, 800);
-    }
+    const handler = setTimeout(() => {
+      setPage(1);
+      setAllReports([]);
+      setSearchQuery(searchValue);
+    }, 800);
 
     return () => {
       clearTimeout(handler);
@@ -550,28 +547,28 @@ const Reports = () => {
       {showFilter && (
         <div className="mobileFilterPopup">
           <div className="filterScreen">
-          <div className="filterHeading">
+            <div className="filterHeading">
               <span
-                className={selectedFilter === 'year' ? 'selected' : ''}
-                onClick={() => handleFilterChange('year')}
+                className={selectedFilter === "year" ? "selected" : ""}
+                onClick={() => handleFilterChange("year")}
               >
                 Year
               </span>
               <span
-                className={selectedFilter === 'authors' ? 'selected' : ''}
-                onClick={() => handleFilterChange('authors')}
+                className={selectedFilter === "authors" ? "selected" : ""}
+                onClick={() => handleFilterChange("authors")}
               >
                 Authors
               </span>
               <span
-                className={selectedFilter === 'sectors' ? 'selected' : ''}
-                onClick={() => handleFilterChange('sectors')}
+                className={selectedFilter === "sectors" ? "selected" : ""}
+                onClick={() => handleFilterChange("sectors")}
               >
                 Sectors
               </span>
               <span
-                className={selectedFilter === 'subsectors' ? 'selected' : ''}
-                onClick={() => handleFilterChange('subsectors')}
+                className={selectedFilter === "subsectors" ? "selected" : ""}
+                onClick={() => handleFilterChange("subsectors")}
               >
                 Sub Sectors
               </span>

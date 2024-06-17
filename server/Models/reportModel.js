@@ -10,7 +10,8 @@ const reportSchema = new Schema({
     image: { type: String, required: true },
     link: { type: String, required: true },
     year: { type: Number, required: true, index: true },
-    month: { type: String, required: true }
+    month: { type: String, required: true },
+    tags: [{ type: String, required: true }]
 }, { timestamps: true });
 
 
