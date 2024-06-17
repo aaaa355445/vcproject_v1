@@ -3,8 +3,9 @@ const Schema = mongoose.Schema;
 
 const subsectorSchema = new Schema({
     ssid: {type: Number, required: true, unique: true, index: true},
-    sid: { type: Number, ref: 'Sector' },
-    name: { type: String, required: true, index: true }
+    name: { type: String, required: true, index: true },
+    sid: { type: Number, ref: 'Sector', index: true },
+    aid: [{ type: Number, ref: 'Author', index: true }],
 }, { timestamps: true });
 
 

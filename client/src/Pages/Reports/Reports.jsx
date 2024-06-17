@@ -101,24 +101,6 @@ const Reports = () => {
       }
     };
 
-    // const fetchSubSectors = async () => {
-    //   const selectedSectorIds = Object.keys(selectedSectors).filter(
-    //     (sid) => selectedSectors[sid]
-    //   );
-    //   if (selectedSectorIds.length > 0) {
-    //     try {
-    //       const data = await getSubSectors(selectedSectorIds);
-    //       setSubsectors(data);
-    //       setVisibleSubsectors(true);
-    //     } catch (error) {
-    //       console.error("Error fetching subsectors:", error);
-    //     }
-    //   } else {
-    //     setSubsectors([]);
-    //     setVisibleSubsectors(false);
-    //   }
-    // };
-
     const fetchYearAndCount = async () => {
       try {
         const data = await getYearAndCount();
@@ -177,15 +159,15 @@ const Reports = () => {
           subsectorParam
         );
         setReports(data.reports);
-        setAllReports((prevAllReports) => {
-          const newReports = data.reports.filter(
-            (report) =>
-              !prevAllReports.some(
-                (prevReport) => prevReport.rid === report.rid
-              )
-          );
-          return [...prevAllReports, ...newReports];
-        });
+        // setAllReports((prevAllReports) => {
+        //   const newReports = data.reports.filter(
+        //     (report) =>
+        //       !prevAllReports.some(
+        //         (prevReport) => prevReport.rid === report.rid
+        //       )
+        //   );
+        //   return [...prevAllReports, ...newReports];
+        // });
         setLoadingReports(false);
       } catch (err) {
         setErrorReports(err);
@@ -511,39 +493,17 @@ const Reports = () => {
                 </div>
               )}
             </div>
-
-            {/* {visibleSubsectors && (
-              <div className="subCategory">
-                <h4>Sub Categories</h4>
-                <div className="subCategoryData">
-                  {subsectors.map((subsector) => (
-                    <span key={subsector.ssid} className="subsectorCheckbox">
-                      <input
-                        type="checkbox"
-                        checked={selectedSubSectors[subsector.ssid] || false}
-                        onChange={() =>
-                          handleSubSectorCheckboxChange(subsector.ssid)
-                        }
-                      />
-                      <p>
-                        {subsector.name} ({subsector.totalReports})
-                      </p>
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )} */}
           </div>
         </div>
 
         <div className="rightReports">
           <div className="reports">
-            {allReports.map((report, index) => (
+            {reports.map((report, index) => (
               <ReportCard key={index} report={report} />
             ))}
           </div>
           <div className="pagination">
-            {allReports.length === 0 ? (
+            {reports.length === 0 ? (
               <div className="no-more-reports">
                 No (more) reports. Please <a href="/contact"> contact us </a> to
                 suggest if we have missed any.
