@@ -130,3 +130,14 @@ export const checkEmailForGuestUser = async (guestId) => {
     throw error;
   }
 };
+
+export const saveSearchQuery = async (searchPayload) => {
+  try {
+    console.log(searchPayload)
+    const response = await axios.post(`${API_URL}/logs-search`, searchPayload);
+    return response.data;
+  } catch (error) {
+    console.error("Error saving search logs", error);
+    throw error;
+  }
+};

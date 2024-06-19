@@ -6,6 +6,7 @@ const SubscribeController = require('./Controllers/subscribeController');
 const ContactController = require('./Controllers/contactController');
 const ReportController = require('./Controllers/reportController');
 const ReportSubscribeController = require("./Controllers/reportSubscribeController")
+const SearchLogsController = require("./Controllers/searchLogsController");
  
 // Reports API
 router.post('/admin/add/report', ReportController.upload);
@@ -35,6 +36,9 @@ router.get('/check-email', ReportSubscribeController.checkEmailForGuestUser);
 
 // Contact API
 router.post('/contact', ContactController.saveContact);
+
+// Save Search Query
+router.post('/logs-search', SearchLogsController.saveSearchLogs);
 
 
 

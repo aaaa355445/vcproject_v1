@@ -7,6 +7,7 @@ import {
   getSectors,
   getSubSectors,
   getYearAndCount,
+  saveSearchQuery,
 } from "../../Services/Api";
 import { ThreeCircles } from "react-loader-spinner";
 import "./Reports.css";
@@ -248,6 +249,11 @@ const Reports = () => {
       setPage(1);
       setAllReports([]);
       setSearchQuery(searchValue);
+      const guestId = localStorage.getItem("guestUserId");
+      if (guestId && searchValue) {
+        const searchPayload = { guestId, searchQuery: searchValue };
+        saveSearchQuery(searchPayload);
+      }
     }, 800);
 
     return () => {
