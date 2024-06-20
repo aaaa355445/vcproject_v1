@@ -3,35 +3,6 @@ import axios from "axios";
 const API_URL = "https://thevcproject.in/api";
 // const API_URL = "http://localhost:5500"
 
-export const getAuthors = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/authors`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching authors:', error);
-    throw error;
-  }
-};
-
-export const getSectors = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/sector`);
-    return response.data.sectors;
-  } catch (error) {
-    console.error('Error fetching sectors:', error);
-    throw error;
-  }
-};
-
-export const getSubSectors = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/subsector`);
-    return response.data.subSectors;
-  } catch (error) {
-    console.error('Error fetching sectors:', error);
-    throw error;
-  }
-};
 
 export const subscribeEmail = async (email) => {
   try {
@@ -146,5 +117,15 @@ export const saveReportLogs = async (reportPayload) => {
     return response.data;
   } catch (error) {
     console.error("Error saving report logs", error);
+  }
+};
+
+export const getFilters = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/filters`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching filters:', error);
+    throw error;
   }
 };

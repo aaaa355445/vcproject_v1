@@ -8,6 +8,7 @@ const ReportController = require('./Controllers/reportController');
 const ReportSubscribeController = require("./Controllers/reportSubscribeController")
 const SearchLogsController = require("./Controllers/searchLogsController");
 const ReportLogsController = require("./Controllers/reportLogsController");
+const FilterController = require("./Controllers/filtersController");
 
  
 // Reports API
@@ -17,17 +18,14 @@ router.get("/years", ReportController.getYearCount);
 
 
 // Authors API
-router.get('/authors', AuthorsController.getAllAuthors);
 router.post('/admin/add/author', AuthorsController.upload);
 
 // Categories API
 router.post('/admin/add/sector', SectorController.upload);
-router.get("/sector", SectorController.getAllSectors);
 router.post('/sector/subsector', SubsectorController.getSubSectorsBySectorIds);
 
 // Subcategories API
 router.post('/admin/add/subsector', SubsectorController.upload);
-router.get("/subsector", SubsectorController.getAllSubSectors);
 
 // Subscribe API
 router.post('/subscribe', SubscribeController.saveEmail);
@@ -44,6 +42,9 @@ router.post('/logs-search', SearchLogsController.saveSearchLogs);
 
 // Save Reports Log
 router.post('/logs-report', ReportLogsController.saveReportLogs);
+
+// filters
+router.get('/filters', FilterController.getAllFilters)
 
 
 

@@ -50,12 +50,9 @@ class SectorController {
           $sort: { name: 1 },
         },
       ]);
-      return res.status(200).json({
-        sectors
-      });
+      return sectors;
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ message: "Something went wrong!!" });
     }
   };
 

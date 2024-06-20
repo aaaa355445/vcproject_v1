@@ -3,11 +3,9 @@ import styles from "./Reports.module.css";
 import ReportCard from "../../components/ReportCard/ReportCard";
 import {
   getReports,
-  getAuthors,
-  getSectors,
-  getSubSectors,
   getYearAndCount,
   saveSearchQuery,
+  getFilters,
 } from "../../Services/Api";
 import { ThreeCircles } from "react-loader-spinner";
 import "./Reports.css";
@@ -20,7 +18,6 @@ const Reports = () => {
   // Authors State
   const [authors, setAuthors] = useState([]);
   const [visibleAuthors, setVisibleAuthors] = useState(8);
-  const [loadingAuthors, setLoadingAuthors] = useState(true);
   const [errorAuthors, setErrorAuthors] = useState(null);
   const [selectedAuthors, setSelectedAuthors] = useState({});
   const [showAuthorsPopup, setShowAuthorsPopup] = useState(false);
@@ -73,30 +70,12 @@ const Reports = () => {
   };
 
   useEffect(() => {
-    const fetchAuthors = async () => {
+    const fetchFilters = async () => {
       try {
-        const data = await getAuthors();
-        setAuthors(data);
-        setLoadingAuthors(false);
-      } catch (err) {
-        setErrorAuthors(err);
-        setLoadingAuthors(false);
-      }
-    };
-
-    const fetchSectors = async () => {
-      try {
-        const data = await getSectors();
-        setSectors(data);
-      } catch (err) {
-        console.error("Error fetching sectors:", err);
-      }
-    };
-
-    const fetchSubSectors = async () => {
-      try {
-        const data = await getSubSectors();
-        setSubsectors(data);
+        const data = await getFilters();
+        setAuthors(data.authors);
+        setSectors(data.sectors);
+        setSubsectors(data.subSectors);
       } catch (err) {
         console.error("Error fetching sectors:", err);
       }
@@ -111,10 +90,8 @@ const Reports = () => {
       }
     };
 
-    fetchSubSectors();
-    fetchAuthors();
-    fetchSectors();
     fetchYearAndCount();
+    fetchFilters();
   }, [selectedSectors]);
 
   useEffect(() => {
@@ -279,7 +256,7 @@ const Reports = () => {
     }
   }, [showAuthorsPopup, showSectorsPopup, showFilter]);
 
-  if (loadingAuthors || loadingReports) {
+  if (loadingReports) {
     return (
       <div className="loader-section">
         <div className="loader">
