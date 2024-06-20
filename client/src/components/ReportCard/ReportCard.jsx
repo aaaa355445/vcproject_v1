@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./ReportCard.module.css";
-import { reportSubscribeEmail, checkEmailForGuestUser } from "../../Services/Api";
+import { reportSubscribeEmail, checkEmailForGuestUser, saveReportLogs } from "../../Services/Api";
 
 const ReportCard = ({ report }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -12,12 +12,18 @@ const ReportCard = ({ report }) => {
     : report.author;
 
 
-  const handleCardClick = async (e) => {
-    e.preventDefault();
+  const handleCardClick = (rid, title) => async (e) => {
     try {
       const guestId = localStorage.getItem('guestUserId');
       const emailExists = await checkEmailForGuestUser(guestId);
-      if (emailExists) {
+      if (emailExists.emailExists) {
+        const reportPayload = {
+          rid,
+          title,
+          guestId,
+          email: emailExists.email
+        }
+        saveReportLogs(reportPayload);
         window.open(report.link, "_blank", "noopener,noreferrer");
       } else {
         setIsPopupOpen(true);
@@ -66,7 +72,7 @@ const ReportCard = ({ report }) => {
   return (
     <>
       <div
-        onClick={handleCardClick}
+        onClick={handleCardClick(report.rid, report.title)}
         className={styles.link}
         style={{ cursor: "pointer" }}
       >

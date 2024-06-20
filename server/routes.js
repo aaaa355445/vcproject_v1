@@ -7,6 +7,8 @@ const ContactController = require('./Controllers/contactController');
 const ReportController = require('./Controllers/reportController');
 const ReportSubscribeController = require("./Controllers/reportSubscribeController")
 const SearchLogsController = require("./Controllers/searchLogsController");
+const ReportLogsController = require("./Controllers/reportLogsController");
+
  
 // Reports API
 router.post('/admin/add/report', ReportController.upload);
@@ -39,6 +41,9 @@ router.post('/contact', ContactController.saveContact);
 
 // Save Search Query
 router.post('/logs-search', SearchLogsController.saveSearchLogs);
+
+// Save Reports Log
+router.post('/logs-report', ReportLogsController.saveReportLogs);
 
 
 

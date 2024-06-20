@@ -124,7 +124,7 @@ export const checkEmailForGuestUser = async (guestId) => {
     const response = await axios.get(`${API_URL}/check-email`, {
       params: { guestId },
     });
-    return response.data.emailExists;
+    return response.data;
   } catch (error) {
     console.error("Error checking email for guest user:", error);
     throw error;
@@ -133,11 +133,18 @@ export const checkEmailForGuestUser = async (guestId) => {
 
 export const saveSearchQuery = async (searchPayload) => {
   try {
-    console.log(searchPayload)
     const response = await axios.post(`${API_URL}/logs-search`, searchPayload);
     return response.data;
   } catch (error) {
     console.error("Error saving search logs", error);
-    throw error;
+  }
+};
+
+export const saveReportLogs = async (reportPayload) => {
+  try {
+    const response = await axios.post(`${API_URL}/logs-report`, reportPayload);
+    return response.data;
+  } catch (error) {
+    console.error("Error saving report logs", error);
   }
 };
