@@ -257,6 +257,7 @@ const Reports = () => {
     setSelectedSectors({});
     setSelectedSubSectors({});
     setSelectedYears({});
+    setAllReports([]);
   };
 
   const inputRef = useRef();
