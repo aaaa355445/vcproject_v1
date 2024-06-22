@@ -126,6 +126,38 @@ class SubsectorController {
       return res.status(500).json({ message: "Something went wrong!!" });
     }
   }
+
+  async getSubSectorsByIds(subSectorIds) {
+    try {
+      const subSectors = await subsectorModel.aggregate([
+        {
+          $match: { ssid: { $in: subSectorIds } }
+        },
+        {
+          $lookup: {
+            from: 'report',
+            localField: 'ssid',
+            foreignField: 'subSector',
+            as: 'reports'
+          }
+        },
+        {
+          $project: {
+            ssid: 1,
+            name: 1,
+            totalReports: { $size: '$reports' }
+          }
+        },
+        {
+          $sort: { name: 1 }
+        }
+      ]);
+      return subSectors;
+    } catch (err) {
+      console.error(err);
+      throw new Error("Something went wrong!!");
+    }
+  }
 }
 
 module.exports = new SubsectorController();

@@ -1,4 +1,6 @@
 const authorModel = require("../Models/authorModel");
+const subSectorService = require("./subsectorController");
+const sectorService = require("./sectorController");
 
 class AuthorController {
   // For Admin
@@ -29,7 +31,7 @@ class AuthorController {
   
 
   // For Bassic Filter
-  async getAllAuthors(req, res) {
+  async getAllAuthors() {
     try {
       const authors = await authorModel
         .aggregate([
@@ -76,6 +78,16 @@ class AuthorController {
       return await authorModel.find({ name: searchRegex });
     } catch (err) {
       console.log(err);
+      throw new Error("Something went wrong!!");
+    }
+  }
+
+  async getAuthorsByIds(authorIds) {
+    try {
+      const authors = await authorModel.find({ aid: { $in: authorIds } });
+      return authors;
+    } catch (err) {
+      console.error(err);
       throw new Error("Something went wrong!!");
     }
   }

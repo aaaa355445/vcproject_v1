@@ -80,6 +80,48 @@ class SectorController {
     }
   }
 
+  async getsectors(sectorIds) {
+    try {
+      const sectors = await sectorModel.find({ sid: { $in: sectorIds } });
+      return sectors;
+    } catch (err) {
+      console.error(err);
+      throw new Error("Something went wrong!!");
+    }
+  }
+
+  async getSectorsByIds(sectorIds) {
+    try {
+      const sectors = await sectorModel.aggregate([
+        {
+          $match: { sid: { $in: sectorIds } }
+        },
+        {
+          $lookup: {
+            from: 'report',
+            localField: 'sid',
+            foreignField: 'sector',
+            as: 'reports'
+          }
+        },
+        {
+          $project: {
+            sid: 1,
+            name: 1,
+            totalReports: { $size: '$reports' }
+          }
+        },
+        {
+          $sort: { name: 1 }
+        }
+      ]);
+      return sectors;
+    } catch (err) {
+      console.error(err);
+      throw new Error("Something went wrong!!");
+    }
+  }
+
 }
 
 module.exports = new SectorController();

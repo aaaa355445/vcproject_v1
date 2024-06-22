@@ -6,6 +6,8 @@ import {
   getYearAndCount,
   saveSearchQuery,
   getFilters,
+  getAuthorFilters,
+  getSectorFilters,
 } from "../../Services/Api";
 import { ThreeCircles } from "react-loader-spinner";
 import "./Reports.css";
@@ -21,12 +23,14 @@ const Reports = () => {
   const [errorAuthors, setErrorAuthors] = useState(null);
   const [selectedAuthors, setSelectedAuthors] = useState({});
   const [showAuthorsPopup, setShowAuthorsPopup] = useState(false);
+  const [selectedAuthorIds, setSelectedAuthorIds] = useState([]);
 
   // Sector State
   const [sectors, setSectors] = useState([]);
   const [visibleSectors, setVisibleSectors] = useState(8);
   const [selectedSectors, setSelectedSectors] = useState({});
   const [showSectorsPopup, setShowSectorsPopup] = useState(false);
+  const [selectedSectorIds, setSelectedSectorIds] = useState([]);
 
   // Sub Sector State
   const [subsectors, setSubsectors] = useState([]);
@@ -50,25 +54,6 @@ const Reports = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("year");
 
-  const handleFilterClick = () => {
-    setShowFilter(!showFilter);
-    setShowSearchPopup(!showFilter);
-  };
-
-  const handleCloseFilter = () => {
-    setShowFilter(false);
-  };
-
-  const handleFilterChange = (filter) => {
-    setSelectedFilter(filter);
-  };
-
-  const handleApplyFilter = () => {
-    // Apply filter logic
-    setShowFilter(false);
-    setShowSearchPopup(false);
-  };
-
   useEffect(() => {
     const fetchFilters = async () => {
       try {
@@ -81,10 +66,34 @@ const Reports = () => {
       }
     };
 
+    const fetchAuthorFilter = async () => {
+      if (selectedAuthorIds.length > 0) {
+        try {
+          const data = await getAuthorFilters(selectedAuthorIds);
+          setSectors(data.sectors);
+          setSubsectors(data.subSectors);
+        } catch (error) {
+          console.error("Error fetching author filters:", error);
+        }
+      }
+    };
+
+    const fetchSectorFilter = async () => {
+      if (selectedSectorIds.length > 0) {
+        try {
+          const data = await getSectorFilters(selectedSectorIds);
+          setSubsectors(data.subSectors);
+        } catch (error) {
+          console.error("Error fetching author filters:", error);
+        }
+      }
+    };
+
     const fetchYearAndCount = async () => {
       try {
         const data = await getYearAndCount();
         setYears(data);
+        setLoadingReports(false);
       } catch (err) {
         console.error("Error fetching years:", err);
       }
@@ -92,11 +101,21 @@ const Reports = () => {
 
     fetchYearAndCount();
     fetchFilters();
-  }, [selectedSectors]);
+    fetchAuthorFilter();
+    fetchSectorFilter();
+  }, [selectedAuthorIds, selectedSectorIds]);
+
+  useEffect(() => {
+    setSelectedAuthorIds(
+      Object.keys(selectedAuthors).filter((id) => selectedAuthors[id])
+    );
+    setSelectedSectorIds(
+      Object.keys(selectedSectors).filter((id) => selectedSectors[id])
+    );
+  }, [selectedAuthors, selectedSectors]);
 
   useEffect(() => {
     const fetchReports = async () => {
-      setLoadingReports(true);
       try {
         const selectedYearsArray = Object.keys(selectedYears).filter(
           (year) => selectedYears[year]
@@ -137,16 +156,15 @@ const Reports = () => {
           subsectorParam
         );
         setReports(data.reports);
-        // setAllReports((prevAllReports) => {
-        //   const newReports = data.reports.filter(
-        //     (report) =>
-        //       !prevAllReports.some(
-        //         (prevReport) => prevReport.rid === report.rid
-        //       )
-        //   );
-        //   return [...prevAllReports, ...newReports];
-        // });
-        setLoadingReports(false);
+        setAllReports((prevAllReports) => {
+          const newReports = data.reports.filter(
+            (report) =>
+              !prevAllReports.some(
+                (prevReport) => prevReport.rid === report.rid
+              )
+          );
+          return [...prevAllReports, ...newReports];
+        });
       } catch (err) {
         setErrorReports(err);
         setLoadingReports(false);
@@ -163,12 +181,27 @@ const Reports = () => {
     selectedSubSectors,
   ]);
 
-  const handleAuthorCheckboxChange = (aid) => {
+  const handleFilterClick = () => {
+    setShowFilter(!showFilter);
+    setShowSearchPopup(!showFilter);
+  };
+
+  const handleFilterChange = (filter) => {
+    setSelectedFilter(filter);
+  };
+
+  const handleApplyFilter = () => {
+    setShowFilter(false);
+    setShowSearchPopup(false);
+  };
+
+  const handleAuthorCheckboxChange = async (aid) => {
     setSelectedAuthors((prev) => ({
       ...prev,
       [aid]: !prev[aid],
     }));
     setPage(1);
+    setAllReports([]);
   };
 
   const handleYearCheckboxChange = (year) => {
@@ -219,6 +252,13 @@ const Reports = () => {
     setShowFilter(false);
   };
 
+  const clearAllFilter = () => {
+    setSelectedAuthors({});
+    setSelectedSectors({});
+    setSelectedSubSectors({});
+    setSelectedYears({});
+  };
+
   const inputRef = useRef();
 
   useEffect(() => {
@@ -240,12 +280,6 @@ const Reports = () => {
 
   const handleInputChange = (e) => {
     setSearchValue(e.target.value);
-  };
-
-  const handleSearchClick = () => {
-    setPage(1);
-    setAllReports([]);
-    setSearchQuery(searchValue);
   };
 
   useEffect(() => {
@@ -280,6 +314,9 @@ const Reports = () => {
         <div className="container">
           <div className="leftSection">
             <span style={{ fontWeight: "bold" }}>FILTERS</span>
+            <span className="clearBtn" onClick={clearAllFilter}>
+              Clear
+            </span>
           </div>
           <div className="rightSection">
             <div className="searchSection">
@@ -291,7 +328,6 @@ const Reports = () => {
                 ref={inputRef}
                 placeholder="Search..."
               />
-              {/* <button onClick={handleSearchClick}>Search</button> */}
             </div>
           </div>
         </div>
@@ -478,7 +514,7 @@ const Reports = () => {
 
         <div className="rightReports">
           <div className="reports">
-            {reports.map((report, index) => (
+            {allReports.map((report, index) => (
               <ReportCard key={index} report={report} />
             ))}
           </div>
@@ -489,9 +525,11 @@ const Reports = () => {
                 suggest if we have missed any.
               </div>
             ) : (
-              <div className="load-more">
-                <button onClick={handleLoadMore}>Load More</button>
-              </div>
+              reports.length >= 15 && (
+                <div className="load-more">
+                  <button onClick={handleLoadMore}>Load More</button>
+                </div>
+              )
             )}
           </div>
         </div>

@@ -129,3 +129,26 @@ export const getFilters = async () => {
     throw error;
   }
 };
+
+export const getAuthorFilters = async (authorIds) => {
+  try {
+    const authors = {authorIds: authorIds}
+    const response = await axios.post(`${API_URL}/author/filters`, authors);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching filters:', error);
+    throw error;
+  }
+};
+
+export const getSectorFilters = async (sectorIds) => {
+  try {
+    const sectors = {sectorIds: sectorIds}
+    const response = await axios.post(`${API_URL}/sector/filters`, sectors);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching filters:', error);
+    throw error;
+  }
+};
+

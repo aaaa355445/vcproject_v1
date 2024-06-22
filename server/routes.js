@@ -45,6 +45,10 @@ router.post('/logs-report', ReportLogsController.saveReportLogs);
 
 // filters
 router.get('/filters', FilterController.getAllFilters)
+router.post('/author/filters', FilterController.getOtherFiltersFromAuthors)
+router.post('/sector/filters', FilterController.getOtherFiltersFromSector)
+
+
 
 
 
