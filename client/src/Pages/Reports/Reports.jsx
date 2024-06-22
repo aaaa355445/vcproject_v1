@@ -13,6 +13,21 @@ import { ThreeCircles } from "react-loader-spinner";
 import "./Reports.css";
 
 const Reports = () => {
+  const placeholders = [
+    "Search for Redseer",
+    "Search for Fintech",
+    "Search for eCommerce",
+    "Search for Elevation",
+    "Search for Gaming",
+    "Search for Blume Ventures",
+    "Search for Financial Services",
+    "Search for Healthcare",
+    "Search for Fireside",
+    "Search for Battery",
+    "Search for Software",
+    "Search for Insurance",
+  ];
+
   // Years State
   const [selectedYears, setSelectedYears] = useState({});
   const [years, setYears] = useState([]);
@@ -40,6 +55,7 @@ const Reports = () => {
 
   // Reports State
   const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [loadingReports, setLoadingReports] = useState(true);
   const [errorReports, setErrorReports] = useState(null);
   const [allReports, setAllReports] = useState([]);
@@ -48,11 +64,22 @@ const Reports = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [showSearchPopup, setShowSearchPopup] = useState(false);
+  const [currentPlaceholder, setCurrentPlaceholder] = useState(placeholders[0]);
 
   // Other state
   const [page, setPage] = useState(1);
   const [showFilter, setShowFilter] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("year");
+
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      index = (index + 1) % placeholders.length;
+      setCurrentPlaceholder(placeholders[index]);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const fetchFilters = async () => {
@@ -116,6 +143,7 @@ const Reports = () => {
 
   useEffect(() => {
     const fetchReports = async () => {
+      setLoading(true);
       try {
         const selectedYearsArray = Object.keys(selectedYears).filter(
           (year) => selectedYears[year]
@@ -165,9 +193,10 @@ const Reports = () => {
           );
           return [...prevAllReports, ...newReports];
         });
+        setLoading(false);
       } catch (err) {
         setErrorReports(err);
-        setLoadingReports(false);
+        setLoading(false);
       }
     };
 
@@ -257,6 +286,13 @@ const Reports = () => {
     setSelectedSectors({});
     setSelectedSubSectors({});
     setSelectedYears({});
+    setAllReports([]);
+  };
+
+  const clearSearch = () => {
+    setSearchValue("");
+    setSearchQuery("");
+    setAllReports([]);
   };
 
   const inputRef = useRef();
@@ -283,12 +319,12 @@ const Reports = () => {
   };
 
   useEffect(() => {
-    if (showAuthorsPopup || showSectorsPopup || showFilter) {
+    if (showFilter) {
       document.body.classList.add("no-scroll");
     } else {
       document.body.classList.remove("no-scroll");
     }
-  }, [showAuthorsPopup, showSectorsPopup, showFilter]);
+  }, [showFilter]);
 
   if (loadingReports) {
     return (
@@ -326,8 +362,11 @@ const Reports = () => {
                 value={searchValue}
                 onChange={handleInputChange}
                 ref={inputRef}
-                placeholder="Search..."
+                placeholder={currentPlaceholder}
               />
+              <span className="clearBtn" onClick={clearSearch}>
+                Clear
+              </span>
             </div>
           </div>
         </div>
@@ -370,7 +409,9 @@ const Reports = () => {
               </div>
               <div className="loadmore">
                 {visibleAuthors < authors.length && (
-                  <span onClick={toggleAuthorsPopup}>+25 more</span>
+                  <span onClick={toggleAuthorsPopup}>
+                    +{authors.length - 8} more
+                  </span>
                 )}
               </div>
               {showAuthorsPopup && (
@@ -419,7 +460,9 @@ const Reports = () => {
               </div>
               <div className="loadmore">
                 {visibleSectors < sectors.length && (
-                  <span onClick={toggleSectorsPopup}>+25 more</span>
+                  <span onClick={toggleSectorsPopup}>
+                    +{sectors.length - 8} more
+                  </span>
                 )}
               </div>
               {showSectorsPopup && (
@@ -472,7 +515,9 @@ const Reports = () => {
               </div>
               <div className="loadmore">
                 {visibleSubsectors < subsectors.length && (
-                  <span onClick={toggleSubSectorsPopup}>+25 more</span>
+                  <span onClick={toggleSubSectorsPopup}>
+                    +{subsectors.length - 8} more
+                  </span>
                 )}
               </div>
               {showSubSectorsPopup && (
@@ -513,25 +558,43 @@ const Reports = () => {
         </div>
 
         <div className="rightReports">
-          <div className="reports">
-            {allReports.map((report, index) => (
-              <ReportCard key={index} report={report} />
-            ))}
-          </div>
-          <div className="pagination">
-            {allReports.length === 0 ? (
-              <div className="no-more-reports">
-                No (more) reports. Please <a href="/contact"> contact us </a> to
-                suggest if we have missed any.
-              </div>
-            ) : (
-              reports.length >= 15 && (
-                <div className="load-more">
-                  <button onClick={handleLoadMore}>Load More</button>
+          {loading ? (
+            <>
+              <div className="mobileLoader">
+                <div className="report-loader">
+                  <ThreeCircles
+                    type="Oval"
+                    color="#4343FF"
+                    height={60}
+                    width={60}
+                  />
                 </div>
-              )
-            )}
-          </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="reports">
+                {allReports.map((report, index) => (
+                  <ReportCard key={index} report={report} />
+                ))}
+              </div>
+              <div className="pagination">
+                {allReports.length === 0 ? (
+                  <div className="no-more-reports">
+                    No (more) reports. Please{" "}
+                    <a href="/contact"> contact us </a> to suggest if we have
+                    missed any.
+                  </div>
+                ) : (
+                  reports.length >= 15 && (
+                    <div className="load-more">
+                      <button onClick={handleLoadMore}>Load More</button>
+                    </div>
+                  )
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -558,8 +621,11 @@ const Reports = () => {
                 value={searchValue}
                 onChange={handleInputChange}
                 ref={inputRef}
-                placeholder="Search..."
+                placeholder={currentPlaceholder}
               />
+              <span className="clearBtn" onClick={clearSearch}>
+                Clear
+              </span>
             </div>
           </div>
         </div>
@@ -593,7 +659,11 @@ const Reports = () => {
               >
                 Sub Sectors
               </span>
+              <span className="clearBtn" onClick={clearAllFilter}>
+                Clear Filters
+              </span>
             </div>
+
             <div className="filterData">
               {selectedFilter === "year" && (
                 <div className="year">
