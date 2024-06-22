@@ -515,18 +515,18 @@ const Reports = () => {
 
         <div className="rightReports">
           <div className="reports">
-            {allReports.map((report, index) => (
+            {reports.map((report, index) => (
               <ReportCard key={index} report={report} />
             ))}
           </div>
           <div className="pagination">
-            {allReports.length === 0 ? (
+            {reports.length === 0 ? (
               <div className="no-more-reports">
                 No (more) reports. Please <a href="/contact"> contact us </a> to
                 suggest if we have missed any.
               </div>
             ) : (
-              allReports.length >= 15 && (
+              reports.length >= 15 && (
                 <div className="load-more">
                   <button onClick={handleLoadMore}>Load More</button>
                 </div>
