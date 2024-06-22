@@ -525,7 +525,7 @@ const Reports = () => {
                 suggest if we have missed any.
               </div>
             ) : (
-              allReports.length >= 15 && (
+              reports.length >= 15 && (
                 <div className="load-more">
                   <button onClick={handleLoadMore}>Load More</button>
                 </div>
