@@ -114,64 +114,63 @@ const Reports = () => {
     );
   }, [selectedAuthors, selectedSectors]);
 
-  const fetchReports = async () => {
-    try {
-      const selectedYearsArray = Object.keys(selectedYears).filter(
-        (year) => selectedYears[year]
-      );
-      const selectedAuthorsArray = Object.keys(selectedAuthors).filter(
-        (aid) => selectedAuthors[aid]
-      );
-      const selectedSectorArray = Object.keys(selectedSectors).filter(
-        (sid) => selectedSectors[sid]
-      );
-      const selectedSubSectorArray = Object.keys(selectedSubSectors).filter(
-        (ssid) => selectedSubSectors[ssid]
-      );
-
-      const yearParam =
-        selectedYearsArray.length > 0
-          ? selectedYearsArray.join("_")
-          : undefined;
-      const authorParam =
-        selectedAuthorsArray.length > 0
-          ? selectedAuthorsArray.join("_")
-          : undefined;
-      const sectorParam =
-        selectedSectorArray.length > 0
-          ? selectedSectorArray.join("_")
-          : undefined;
-      const subsectorParam =
-        selectedSubSectorArray.length > 0
-          ? selectedSubSectorArray.join("_")
-          : undefined;
-
-      const data = await getReports(
-        page,
-        yearParam,
-        authorParam,
-        searchQuery,
-        sectorParam,
-        subsectorParam
-      );
-      setReports(data.reports);
-
-      setAllReports((prevAllReports) => {
-        const newReports = data.reports.filter(
-          (report) =>
-            !prevAllReports.some(
-              (prevReport) => prevReport.rid === report.rid
-            )
-        );
-        return [...prevAllReports, ...newReports];
-      });
-    } catch (err) {
-      setErrorReports(err);
-      setLoadingReports(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const selectedYearsArray = Object.keys(selectedYears).filter(
+          (year) => selectedYears[year]
+        );
+        const selectedAuthorsArray = Object.keys(selectedAuthors).filter(
+          (aid) => selectedAuthors[aid]
+        );
+        const selectedSectorArray = Object.keys(selectedSectors).filter(
+          (sid) => selectedSectors[sid]
+        );
+        const selectedSubSectorArray = Object.keys(selectedSubSectors).filter(
+          (ssid) => selectedSubSectors[ssid]
+        );
+
+        const yearParam =
+          selectedYearsArray.length > 0
+            ? selectedYearsArray.join("_")
+            : undefined;
+        const authorParam =
+          selectedAuthorsArray.length > 0
+            ? selectedAuthorsArray.join("_")
+            : undefined;
+        const sectorParam =
+          selectedSectorArray.length > 0
+            ? selectedSectorArray.join("_")
+            : undefined;
+        const subsectorParam =
+          selectedSubSectorArray.length > 0
+            ? selectedSubSectorArray.join("_")
+            : undefined;
+
+        const data = await getReports(
+          page,
+          yearParam,
+          authorParam,
+          searchQuery,
+          sectorParam,
+          subsectorParam
+        );
+        setReports(data.reports);
+        setAllReports((prevAllReports) => {
+          const newReports = data.reports.filter(
+            (report) =>
+              !prevAllReports.some(
+                (prevReport) => prevReport.rid === report.rid
+              )
+          );
+          return [...prevAllReports, ...newReports];
+        });
+      } catch (err) {
+        setErrorReports(err);
+        setLoadingReports(false);
+      }
+    };
+
     fetchReports();
   }, [
     page,
@@ -265,10 +264,10 @@ const Reports = () => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setPage(1);
-      setAllReports([]);
       setSearchQuery(searchValue);
       const guestId = localStorage.getItem("guestUserId");
       if (guestId && searchValue) {
+        setAllReports([]);
         const searchPayload = { guestId, searchQuery: searchValue };
         saveSearchQuery(searchPayload);
       }
@@ -515,18 +514,18 @@ const Reports = () => {
 
         <div className="rightReports">
           <div className="reports">
-            {reports.map((report, index) => (
+            {allReports.map((report, index) => (
               <ReportCard key={index} report={report} />
             ))}
           </div>
           <div className="pagination">
-            {reports.length === 0 ? (
+            {allReports.length === 0 ? (
               <div className="no-more-reports">
                 No (more) reports. Please <a href="/contact"> contact us </a> to
                 suggest if we have missed any.
               </div>
             ) : (
-              reports.length >= 15 && (
+              allReports.length >= 15 && (
                 <div className="load-more">
                   <button onClick={handleLoadMore}>Load More</button>
                 </div>
