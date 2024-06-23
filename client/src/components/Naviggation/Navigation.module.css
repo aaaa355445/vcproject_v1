@@ -56,6 +56,24 @@
     display: none;
 }
 
+a {
+    text-decoration: none;
+}
+
+a.join {
+    text-decoration: underline;
+}
+p.new {
+    position: relative;
+    background-color: red;
+    left: 45%;
+    top: -50%;
+    border-radius: 15px;
+    font-size: 13px;
+    padding: 2px 5px;
+    width: 30px;
+}
+
 @media (max-width: 768px) {
     .hamburger {
         display: block;

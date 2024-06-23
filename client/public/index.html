@@ -56,11 +56,21 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-    <a href="/reports">
-      <div class="Whatsapp">
-        <img src="https://static.vecteezy.com/system/resources/previews/031/737/239/original/whatsapp-logo-whatsapp-social-media-icon-free-png.png" alt="">
-        <p>Join the exclusive community of investors!</p>
+      <div class="community"  id="whatsappDiv">
+        <span class="close-btn" onclick="hideWhatsappDiv()">×</span>
+        <a href="https://cutt.ly/thevcprojectcommunity" target="_blank">
+          <div class="Whatsapp">
+            <img src="https://static.vecteezy.com/system/resources/previews/031/737/239/original/whatsapp-logo-whatsapp-social-media-icon-free-png.png" alt="">
+            <p>Join the exclusive community of investors!</p>
+          </div>
+        </a>
       </div>
-    </a>
+
+    <script>
+      function hideWhatsappDiv() {
+        var whatsappDiv = document.getElementById('whatsappDiv');
+        whatsappDiv.style.display = 'none';
+      }
+    </script>
   </body>
 </html>

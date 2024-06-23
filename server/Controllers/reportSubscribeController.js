@@ -29,14 +29,13 @@ class ReportSubscribeController {
         }
   
         const newSubscriber = await reportSubscribeModel.findOne({guestId});
-        console.log(newSubscriber.email)
         let emailExists = false;
         if (newSubscriber){
           emailExists = true;
         }
         return res.status(200).json({
           emailExists,
-          email: newSubscriber.email
+          email: newSubscriber?.email
         });
       } catch (err) {
         console.log(err);

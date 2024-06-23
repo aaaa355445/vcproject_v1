@@ -13,6 +13,10 @@ const Navigation = () => {
     color: "white",
     textDecoration: "none",
   };
+  const spanStyle = {
+    margin: "10px",
+    
+  };
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
@@ -56,6 +60,11 @@ const Navigation = () => {
           <span>
             <Link style={brandStyle} to="/faq" onClick={closeMobileMenu}>
               FAQs
+            </Link>
+          </span>
+          <span style={spanStyle}>
+            <Link style={brandStyle} to="https://cutt.ly/thevcprojectcommunity" target="_blank">
+            Join community !
             </Link>
           </span>
         </div>

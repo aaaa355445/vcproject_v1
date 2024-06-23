@@ -113,7 +113,7 @@ const ReportCard = ({ report }) => {
                 <label htmlFor="email">Email*</label>
                 <input
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="Enter your official email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required

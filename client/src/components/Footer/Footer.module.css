@@ -7,6 +7,7 @@
     background-color: #121212;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.103);
     margin-top: auto;
+    position: absolute;
 }
 
 .upperSection {
@@ -95,11 +96,25 @@
 
 
 
-
+.footerCompany .cta,
 .footerHelp .cta {
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+a.join {
+    text-decoration: underline;
+}
+p.new {
+    position: relative;
+    background-color: red;
+    left: 45%;
+    top: -50%;
+    border-radius: 15px;
+    font-size: 13px;
+    padding: 2px 5px;
+    width: 30px;
 }
 
 @media (max-width: 768px) {

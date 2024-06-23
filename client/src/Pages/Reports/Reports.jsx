@@ -250,6 +250,8 @@ const Reports = () => {
     }));
     setPage(1);
     setAllReports([]);
+    window.scrollTo(0, 0);
+    previousScrollTop.current = 0;
   };
 
   const handleSectorCheckboxChange = (sid) => {

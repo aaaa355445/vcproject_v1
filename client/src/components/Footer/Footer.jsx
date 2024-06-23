@@ -13,8 +13,9 @@ const Footer = () => {
         </div>
         <div className={styles.footerCompany}>
           <span>Company</span>
-          <div className="cta">
+          <div className={styles.cta}>
             <a href="/reports">Reports</a>
+            <a href="https://cutt.ly/thevcprojectcommunity" className={styles.join} target="_blank">Join community !</a><p className={styles.new}>New</p>            
           </div>
         </div>
         <div className={styles.footerHelp}>
