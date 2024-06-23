@@ -70,13 +70,21 @@ const Reports = () => {
   const [page, setPage] = useState(1);
   const [showFilter, setShowFilter] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("year");
+  const previousScrollTop = useRef(0);
+  const rightReportsRef = useRef(null);
+
+  useEffect(() => {
+    if (!loading && rightReportsRef.current) {
+      rightReportsRef.current.scrollTop = previousScrollTop.current;
+    }
+  }, [loading]);
 
   useEffect(() => {
     let index = 0;
     const interval = setInterval(() => {
       index = (index + 1) % placeholders.length;
       setCurrentPlaceholder(placeholders[index]);
-    }, 5000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -231,6 +239,8 @@ const Reports = () => {
     }));
     setPage(1);
     setAllReports([]);
+    window.scrollTo(0, 0)
+    previousScrollTop.current = 0;
   };
 
   const handleYearCheckboxChange = (year) => {
@@ -249,6 +259,8 @@ const Reports = () => {
     }));
     setPage(1);
     setAllReports([]);
+    window.scrollTo(0, 0);
+    previousScrollTop.current = 0;
   };
 
   const handleSubSectorCheckboxChange = (ssid) => {
@@ -258,6 +270,8 @@ const Reports = () => {
     }));
     setPage(1);
     setAllReports([]);
+    window.scrollTo(0, 0);
+    previousScrollTop.current = 0;
   };
 
   const toggleAuthorsPopup = () => {
@@ -273,6 +287,7 @@ const Reports = () => {
   };
 
   const handleLoadMore = () => {
+    setLoading(true);
     setPage((prevPage) => prevPage + 1);
   };
 
@@ -557,7 +572,7 @@ const Reports = () => {
           </div>
         </div>
 
-        <div className="rightReports">
+        <div className="rightReports" ref={rightReportsRef}>
           {loading ? (
             <>
               <div className="mobileLoader">
@@ -588,8 +603,17 @@ const Reports = () => {
                 ) : (
                   reports.length >= 15 && (
                     <div className="load-more">
-                      <button onClick={handleLoadMore}>Load More</button>
-                    </div>
+                  <button
+                    onClick={() => {
+                      if (rightReportsRef.current) {
+                        previousScrollTop.current = rightReportsRef.current.scrollTop;
+                      }
+                      handleLoadMore();
+                    }}
+                  >
+                    Load More
+                  </button>
+                </div>
                   )
                 )}
               </div>
