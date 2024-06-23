@@ -390,7 +390,7 @@ const Home = () => {
           <form onSubmit={handleSubmit} className="newsletter-form">
             <input
               type="email"
-              placeholder="Enter your email"
+              placeholder="Enter your official email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
