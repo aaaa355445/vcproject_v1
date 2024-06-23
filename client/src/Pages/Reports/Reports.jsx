@@ -90,17 +90,6 @@ const Reports = () => {
   }, []);
 
   useEffect(() => {
-    const fetchFilters = async () => {
-      try {
-        const data = await getFilters();
-        setAuthors(data.authors);
-        setSectors(data.sectors);
-        setSubsectors(data.subSectors);
-      } catch (err) {
-        console.error("Error fetching sectors:", err);
-      }
-    };
-
     const fetchAuthorFilter = async () => {
       if (selectedAuthorIds.length > 0) {
         try {
@@ -123,7 +112,22 @@ const Reports = () => {
         }
       }
     };
+    fetchAuthorFilter();
+    fetchSectorFilter();
+  }, [selectedAuthorIds, selectedSectorIds])
 
+  const fetchFilters = async () => {
+    try {
+      const data = await getFilters();
+      setAuthors(data.authors);
+      setSectors(data.sectors);
+      setSubsectors(data.subSectors);
+    } catch (err) {
+      console.error("Error fetching sectors:", err);
+    }
+  };
+
+  useEffect(() => {
     const fetchYearAndCount = async () => {
       try {
         const data = await getYearAndCount();
@@ -136,9 +140,7 @@ const Reports = () => {
 
     fetchYearAndCount();
     fetchFilters();
-    fetchAuthorFilter();
-    fetchSectorFilter();
-  }, [selectedAuthorIds, selectedSectorIds]);
+  }, []);
 
   useEffect(() => {
     setSelectedAuthorIds(
@@ -303,6 +305,7 @@ const Reports = () => {
     setSelectedSectors({});
     setSelectedSubSectors({});
     setSelectedYears({});
+    fetchFilters();
     setAllReports([]);
   };
 
