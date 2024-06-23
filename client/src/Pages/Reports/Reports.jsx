@@ -69,7 +69,7 @@ const Reports = () => {
   // Other state
   const [page, setPage] = useState(1);
   const [showFilter, setShowFilter] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState("year");
+  const [selectedFilter, setSelectedFilter] = useState("sector");
   const previousScrollTop = useRef(0);
   const rightReportsRef = useRef(null);
 
