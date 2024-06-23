@@ -118,6 +118,11 @@ p.new {
 }
 
 @media (max-width: 768px) {
+    p.new {
+        left: 39%;
+        top: 40%;
+        position: absolute;
+    }
     .upperSection {
         flex-direction: column;
         width: auto;
