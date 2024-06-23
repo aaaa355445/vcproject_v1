@@ -157,7 +157,7 @@ class ReportController {
     try {
       const yearlyCounts = await reportModel.aggregate([
         { $group: { _id: "$year", count: { $sum: 1 } } },
-        { $sort: { _id: 1 } },
+        { $sort: { _id: -1 } },
       ]);
   
       const result = yearlyCounts.map(({ _id, count }) => ({ year: _id.toString(), totalReport: count }));

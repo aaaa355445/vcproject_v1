@@ -84,7 +84,7 @@ const Reports = () => {
     const interval = setInterval(() => {
       index = (index + 1) % placeholders.length;
       setCurrentPlaceholder(placeholders[index]);
-    }, 3000);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, []);
@@ -239,7 +239,7 @@ const Reports = () => {
     }));
     setPage(1);
     setAllReports([]);
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
     previousScrollTop.current = 0;
   };
 
@@ -366,7 +366,7 @@ const Reports = () => {
           <div className="leftSection">
             <span style={{ fontWeight: "bold" }}>FILTERS</span>
             <span className="clearBtn" onClick={clearAllFilter}>
-              Clear
+              Reset
             </span>
           </div>
           <div className="rightSection">
@@ -390,73 +390,6 @@ const Reports = () => {
       <div className="lowersection">
         <div className="leftFilter">
           <div className="filters">
-            <div className="year">
-              <h4>Select Year</h4>
-              <div className="yearData">
-                {years.map((year) => (
-                  <span key={year.year} className="yearCheckbox">
-                    <input
-                      type="checkbox"
-                      checked={selectedYears[year.year] || false}
-                      onChange={() => handleYearCheckboxChange(year.year)}
-                    />
-                    <p>
-                      {year.year} ({year.totalReport})
-                    </p>
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="author">
-              <h4>Authors</h4>
-              <div className="authorsData">
-                {authors.slice(0, visibleAuthors).map((author) => (
-                  <span key={author.aid} className="authorCheckbox">
-                    <input
-                      type="checkbox"
-                      checked={selectedAuthors[author.aid] || false}
-                      onChange={() => handleAuthorCheckboxChange(author.aid)}
-                    />{" "}
-                    {author.name} ({author.totalReports})
-                  </span>
-                ))}
-              </div>
-              <div className="loadmore">
-                {visibleAuthors < authors.length && (
-                  <span onClick={toggleAuthorsPopup}>
-                    +{authors.length - 8} more
-                  </span>
-                )}
-              </div>
-              {showAuthorsPopup && (
-                <div className="popup">
-                  <div className="popup-content">
-                    <button
-                      className="close-popup"
-                      onClick={toggleAuthorsPopup}
-                    >
-                      &times;
-                    </button>
-                    <div className="popup-authors">
-                      {authors.map((author) => (
-                        <span key={author.aid} className="popup-authorCheckbox">
-                          <input
-                            type="checkbox"
-                            checked={selectedAuthors[author.aid] || false}
-                            onChange={() =>
-                              handleAuthorCheckboxChange(author.aid)
-                            }
-                          />{" "}
-                          {author.name} ({author.totalReports})
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
             <div className="category">
               <h4>Sector</h4>
               <div className="categoryData">
@@ -467,9 +400,7 @@ const Reports = () => {
                       checked={selectedSectors[sector.sid] || false}
                       onChange={() => handleSectorCheckboxChange(sector.sid)}
                     />
-                    <p>
-                      {sector.name} ({sector.totalReports})
-                    </p>
+                    <p>{sector.name}</p>
                   </span>
                 ))}
               </div>
@@ -499,9 +430,7 @@ const Reports = () => {
                               handleSectorCheckboxChange(sector.sid)
                             }
                           />
-                          <p>
-                            {sector.name} ({sector.totalReports})
-                          </p>
+                          <p>{sector.name}</p>
                         </span>
                       ))}
                     </div>
@@ -522,9 +451,7 @@ const Reports = () => {
                         handleSubSectorCheckboxChange(subsector.ssid)
                       }
                     />
-                    <p>
-                      {subsector.name} ({subsector.totalReports})
-                    </p>
+                    <p>{subsector.name}</p>
                   </span>
                 ))}
               </div>
@@ -559,15 +486,78 @@ const Reports = () => {
                               handleSubSectorCheckboxChange(subsector.ssid)
                             }
                           />
-                          <p>
-                            {subsector.name} ({subsector.totalReports})
-                          </p>
+                          <p>{subsector.name}</p>
                         </span>
                       ))}
                     </div>
                   </div>
                 </div>
               )}
+            </div>
+
+            <div className="author">
+              <h4>Authors</h4>
+              <div className="authorsData">
+                {authors.slice(0, visibleAuthors).map((author) => (
+                  <span key={author.aid} className="authorCheckbox">
+                    <input
+                      type="checkbox"
+                      checked={selectedAuthors[author.aid] || false}
+                      onChange={() => handleAuthorCheckboxChange(author.aid)}
+                    />{" "}
+                    {author.name}
+                  </span>
+                ))}
+              </div>
+              <div className="loadmore">
+                {visibleAuthors < authors.length && (
+                  <span onClick={toggleAuthorsPopup}>
+                    +{authors.length - 8} more
+                  </span>
+                )}
+              </div>
+              {showAuthorsPopup && (
+                <div className="popup">
+                  <div className="popup-content">
+                    <button
+                      className="close-popup"
+                      onClick={toggleAuthorsPopup}
+                    >
+                      &times;
+                    </button>
+                    <div className="popup-authors">
+                      {authors.map((author) => (
+                        <span key={author.aid} className="popup-authorCheckbox">
+                          <input
+                            type="checkbox"
+                            checked={selectedAuthors[author.aid] || false}
+                            onChange={() =>
+                              handleAuthorCheckboxChange(author.aid)
+                            }
+                          />{" "}
+                          {author.name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="year">
+              <h4>Select Year</h4>
+              <div className="yearData">
+                {years.map((year) => (
+                  <span key={year.year} className="yearCheckbox">
+                    <input
+                      type="checkbox"
+                      checked={selectedYears[year.year] || false}
+                      onChange={() => handleYearCheckboxChange(year.year)}
+                    />
+                    <p>{year.year}</p>
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -603,17 +593,18 @@ const Reports = () => {
                 ) : (
                   reports.length >= 15 && (
                     <div className="load-more">
-                  <button
-                    onClick={() => {
-                      if (rightReportsRef.current) {
-                        previousScrollTop.current = rightReportsRef.current.scrollTop;
-                      }
-                      handleLoadMore();
-                    }}
-                  >
-                    Load More
-                  </button>
-                </div>
+                      <button
+                        onClick={() => {
+                          if (rightReportsRef.current) {
+                            previousScrollTop.current =
+                              rightReportsRef.current.scrollTop;
+                          }
+                          handleLoadMore();
+                        }}
+                      >
+                        Load More
+                      </button>
+                    </div>
                   )
                 )}
               </div>
@@ -660,18 +651,6 @@ const Reports = () => {
           <div className="filterScreen">
             <div className="filterHeading">
               <span
-                className={selectedFilter === "year" ? "selected" : ""}
-                onClick={() => handleFilterChange("year")}
-              >
-                Year
-              </span>
-              <span
-                className={selectedFilter === "authors" ? "selected" : ""}
-                onClick={() => handleFilterChange("authors")}
-              >
-                Authors
-              </span>
-              <span
                 className={selectedFilter === "sectors" ? "selected" : ""}
                 onClick={() => handleFilterChange("sectors")}
               >
@@ -683,8 +662,20 @@ const Reports = () => {
               >
                 Sub Sectors
               </span>
+              <span
+                className={selectedFilter === "authors" ? "selected" : ""}
+                onClick={() => handleFilterChange("authors")}
+              >
+                Authors
+              </span>
+              <span
+                className={selectedFilter === "year" ? "selected" : ""}
+                onClick={() => handleFilterChange("year")}
+              >
+                Year
+              </span>
               <span className="clearBtn" onClick={clearAllFilter}>
-                Clear Filters
+                Reset
               </span>
             </div>
 
@@ -699,9 +690,7 @@ const Reports = () => {
                           checked={selectedYears[year.year] || false}
                           onChange={() => handleYearCheckboxChange(year.year)}
                         />
-                        <p>
-                          {year.year} ({year.totalReport})
-                        </p>
+                        <p>{year.year}</p>
                       </span>
                     ))}
                   </div>
@@ -719,9 +708,7 @@ const Reports = () => {
                             handleSectorCheckboxChange(sector.sid)
                           }
                         />
-                        <p>
-                          {sector.name} ({sector.totalReports})
-                        </p>
+                        <p>{sector.name}</p>
                       </span>
                     ))}
                   </div>
@@ -739,9 +726,7 @@ const Reports = () => {
                             handleSubSectorCheckboxChange(subsector.ssid)
                           }
                         />
-                        <p>
-                          {subsector.name} ({subsector.totalReports})
-                        </p>
+                        <p>{subsector.name}</p>
                       </span>
                     ))}
                   </div>
@@ -759,7 +744,7 @@ const Reports = () => {
                             handleAuthorCheckboxChange(author.aid)
                           }
                         />{" "}
-                        {author.name} ({author.totalReports})
+                        {author.name}
                       </span>
                     ))}
                   </div>

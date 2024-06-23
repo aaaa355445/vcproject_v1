@@ -9,6 +9,7 @@ const Faq = () => {
       answer:
         "This project is an initiative to help everybody find all the reports about India in one place. ",
     },
+    // Add  Contact Page
     {
       question:
         "What is the procedure for uploading my firm’s report onto this repository?",
@@ -18,22 +19,22 @@ const Faq = () => {
     {
       question: "Are all the reports about India covered in this?",
       answer:
-        "No, we are working continuously to make it as comprehensive as possible. There are about ~700 credible reports about India written in the last 5 years as per our estimated. We are dedicating 2-3 hours every day to take this number to 700 as soon as possible from ~150 right now.  ",
+        "No, we are working continuously to make it as comprehensive as possible. There are about ~1000 credible reports about India written in the last 5 years as per our estimates. We are dedicating 2-3 hours every day to take this number to 1000 as soon as possible from ~300 right now.  ",
     },
     {
       question: "How do you intend to earn from this?",
       answer:
-        "No, we do not intend to monetize the reports. We believe this is the author’s Intellectual Property and they deserve full credit and associated benefits that come along with it. We attempt to get the reports into more hands- that’s it. It will always be free and open source. ",
+        "No, we do not intend to monetize the reports. We believe this is the author’s intellectual property and they deserve full credit and associated benefits that come along with it. We attempt to get the reports into more hands- that’s it. It will always be free and open source. ",
     },
     {
       question: "How can I contribute to this project?",
-      answer:`Three ways you can be a part of this:\n\n1. Telling us what reports we are missing or suggesting any interesting reports (Contact Us page)\n2. Sharing any feedback on how it can be made better for everybody to use (Contact Us page)\n3. Spreading the word - make it reach into more hands. (Your WhatsApp, Twitter, Linkedin:)\n\nAlong with that, please feel free to reach out to Ayush Mittal from RedSeer Strategy Consultants (at mittalayush740@gmail.com) or Linkedin to schedule a call and discuss more`,
+      answer:`Three ways you can be a part of this:\n\n1. Telling us what reports we are missing or suggesting any interesting reports (Contact Us page)\n2. Sharing any feedback on how it can be made better for everybody to use (Contact Us page)\n3. Spreading the word - make it reach into more hands. (Your WhatsApp, Twitter, Linkedin)`,
   }
   ,
     {
       question: "How do you choose which reports to upload?",
       answer:
-        "We take into account the credibility of the author above everything else. We prefer reports from reputed consulting firms, investment banks, Venture capital firms, Private equity firms, and govt. Bodies.",
+        "We take into account the credibility of the author above everything else. We prefer reports from reputed consulting firms, investment banks, venture capital firms, private equity firms, and govt. bodies.",
     },
   ];
 

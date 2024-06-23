@@ -8,8 +8,7 @@ const Footer = () => {
         <div className={styles.footerAbout}>
           <h4>The VC Project</h4>
           <p>
-            India's largest reports repository for investors, analysts and
-            founders
+            India's largest reports repository for India's top investors
           </p>
         </div>
         <div className={styles.footerCompany}>
