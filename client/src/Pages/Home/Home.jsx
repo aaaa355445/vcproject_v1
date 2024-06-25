@@ -72,7 +72,7 @@ const Home = () => {
           </h1>
           <h4>
             India is booming, We help you make sense of different sectors in its
-            multi-country country.
+            multi-country.
           </h4>
           <a href="/reports">
             <button>VIEW REPORTS</button>
@@ -212,8 +212,8 @@ const Home = () => {
           <div className="left">
             <h3>Understanding sectors in depth</h3>
             <p>
-              Collate reports of all sectors, reputed authors, quantity over
-              quality.
+              Collate reports of all sectors, reputed authors, quality over
+              quantity.
             </p>
           </div>
           <div className="right">
