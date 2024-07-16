@@ -15,6 +15,7 @@ const FilterController = require("./Controllers/filtersController");
 router.post('/admin/add/report', ReportController.upload);
 router.get("/reports", ReportController.getReports);
 router.get("/years", ReportController.getYearCount);
+router.get("/report/:rid", ReportController.getReportDetails);
 
 
 // Authors API

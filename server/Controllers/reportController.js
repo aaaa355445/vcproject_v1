@@ -168,6 +168,45 @@ class ReportController {
       return res.status(500).json({ message: "Something went wrong" });
     }
   }
+
+  async getReportDetails(req, res) {
+    try {
+      const reportData = await reportModel.find({rid: req.params.rid});
+      if (!reportData) {
+        return res.status(404).send('Report not found');
+      }
+      const transformedReports = await Promise.all(
+        reportData.map(async (report) => {
+          const authorName = await authorController.getAuthorNames(
+            report.author
+          );
+          const sectorName = await sectorController.getSectorName(
+            report.sector
+          );
+          const subSectorName = await subsectorController.getSubSectorName(
+            report.subSector
+          );
+          return {
+            rid: report.rid,
+            title: report.title,
+            year: report.year,
+            month: report.month,
+            author: authorName,
+            sector: sectorName,
+            subSector: subSectorName,
+            link: report.link,
+            image: report.image,
+          };
+        })
+      );
+      return res.status(200).json(transformedReports[0]);
+    }
+    catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Something went wrong" });
+    }
+  }
+
   
 }
 

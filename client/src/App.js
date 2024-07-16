@@ -8,6 +8,7 @@ import Contact from './Pages/Contact/Contact';
 import FaqPage from './Pages/Faq/FaqPage';
 import React, { useEffect } from 'react';
 import { generateGuestUserId } from './Services/Api';
+import ReportDetails from './Pages/ReportDetails/ReportDetails';
 
 function App() {
   useEffect(() => {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/reports" element={<Reports/>} exact />
           <Route path="/contact" element={ <Contact/>} exact /> 
           <Route path="/faq" element={ <FaqPage/>} exact /> 
+          <Route path="/report/:rid" element={ <ReportDetails/>} />
       </Routes >
       <Footer />
   </BrowserRouter>

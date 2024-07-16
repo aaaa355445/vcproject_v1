@@ -152,3 +152,13 @@ export const getSectorFilters = async (sectorIds) => {
   }
 };
 
+export const getReportDetails = async (rid) => {
+  try {
+    const response = await axios.get(`${API_URL}/report/${rid}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching report details:', error);
+    throw error;
+  }
+};
+
