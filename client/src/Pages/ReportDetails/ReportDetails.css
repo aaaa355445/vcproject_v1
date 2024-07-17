@@ -1,12 +1,3 @@
-.reportDetails {
-    padding-top: 70px;
-    /* height: 100vh; */
-}
-
-.reportInfo {
-    margin: 24px 24px;
-}
-
 .reportInfo h1 {
     font-size: 24px;
 }
@@ -18,4 +9,13 @@
     align-items: center;
     background-color: #4343FF;
     color: white;
+    flex-direction: column;
+}
+
+.reportInfoStrip h1 {
+    font-size: 14px;
+}
+
+.reportInfoStrip p {
+    font-size: 10px;
 }

@@ -26,9 +26,10 @@ const ReportDetails = () => {
         <p>• {report.sector} • {report.subSector}</p>
         <p>{report.year}</p>
         </div> */}
-        <div className="reportInfoStrip">
+        {/* <div className="reportInfoStrip">
+        <h1>{report.title}</h1>
         <p>By ~ {report.author} • {report.sector} • {report.subSector}</p>
-        </div>
+        </div> */}
         <iframe
         src={report.link}
         style={{ width: '100%', height: '1000px' }}
