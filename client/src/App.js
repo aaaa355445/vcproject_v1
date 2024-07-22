@@ -8,20 +8,6 @@ import Contact from './Pages/Contact/Contact';
 import FaqPage from './Pages/Faq/FaqPage';
 import React, { useEffect } from 'react';
 import { generateGuestUserId } from './Services/Api';
-import ReportDetails from './Pages/ReportDetails/ReportDetails';
-
-function Layout({ children }) {
-  const location = useLocation();
-  const isReportDetailsPage = location.pathname.startsWith('/report/');
-  
-  return (
-    <div>
-      {!isReportDetailsPage && <Navigation />}
-      {children}
-      {!isReportDetailsPage && <Footer />}
-    </div>
-  );
-}
 
 function App() {
   useEffect(() => {
@@ -30,16 +16,15 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} exact />
-          <Route path="/reports" element={<Reports />} exact />
-          <Route path="/contact" element={<Contact />} exact />
-          <Route path="/faq" element={<FaqPage />} exact />
-          <Route path="/report/:rid" element={<ReportDetails />} />
-        </Routes>
-      </Layout>
-    </BrowserRouter>
+    <Navigation /> 
+      <Routes >
+          <Route path="/" element={<Home/>} exact />
+          <Route path="/reports" element={<Reports/>} exact />
+          <Route path="/contact" element={ <Contact/>} exact /> 
+          <Route path="/faq" element={ <FaqPage/>} exact /> 
+      </Routes >
+      <Footer />
+  </BrowserRouter>
   );
 }
 
