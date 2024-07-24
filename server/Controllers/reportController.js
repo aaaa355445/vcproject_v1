@@ -168,7 +168,54 @@ class ReportController {
       return res.status(500).json({ message: "Something went wrong" });
     }
   }
+
+  async getReportDetails(req, res) {
+    try {
+      const reportData = await reportModel.find({rid: req.params.rid});
+      if (!reportData) {
+        return res.status(404).send('Report not found');
+      }
+
+      const mainReport = reportData[0];
+      const transformedReport = await transformReport(mainReport);
+
+      const similarReports = await reportModel.aggregate([
+        { $match: { sector: mainReport.sector, rid: { $ne: mainReport.rid } } },
+        { $sample: { size: 5 } }
+      ]);
+
+      const transformedSimilarReports = await Promise.all(
+        similarReports.map(transformReport)
+      );
+
+      return res.status(200).json({
+        ...transformedReport,
+        similarReports: transformedSimilarReports
+      });
+    }
+    catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Something went wrong" });
+    }
+  }
   
+}
+
+async function transformReport(report) {
+  const authorName = await authorController.getAuthorNames(report.author);
+  const sectorName = await sectorController.getSectorName(report.sector);
+  const subSectorName = await subsectorController.getSubSectorName(report.subSector);
+  return {
+    rid: report.rid,
+    title: report.title,
+    year: report.year,
+    month: report.month,
+    author: authorName,
+    sector: sectorName,
+    subSector: subSectorName,
+    link: report.link,
+    image: report.image
+  };
 }
 
 module.exports = new ReportController();

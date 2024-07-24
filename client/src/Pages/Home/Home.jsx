@@ -71,7 +71,7 @@ const Home = () => {
             Get all <span>reports</span> about India in one place
           </h1>
           <h4>
-            India is booming, We help you make sense of different sectors in its
+            India is booming, we help you make sense of different sectors in its
             multi-country.
           </h4>
           <a href="/reports">
@@ -331,7 +331,7 @@ const Home = () => {
             <div className="gridmem">
               <img className="memberImg" src="/images/sid-image.jpeg" alt="" />
               <h3>Explorer Sidharth</h3>
-              <p>Tech at Dailyobjects</p>
+              <p>SDE1 at Dailyobjects</p>
               <p>Tech</p>
               <div className="socials">
                 <a target="_blank" href="https://www.linkedin.com/in/sidharthv17">
@@ -354,7 +354,7 @@ const Home = () => {
             <div className="gridmem">
               <img
                 className="memberImg"
-                src="https://vc-thumbnails.blr1.cdn.digitaloceanspaces.com/carousel/Team_Member/CHETANYA.WEBP"
+                src="https://vc-thumbnails.blr1.cdn.digitaloceanspaces.com/thumbnails/photo.webp"
                 alt=""
               />
               <h3>Reliable Chetanya</h3>

@@ -62,7 +62,7 @@
 }
 
 /* Pseudo-element for the dashed line */
-.landingPage::before {
+/* .landingPage::before {
   content: "";
   position: absolute;
   top: 150px;
@@ -73,7 +73,7 @@
   background-size: 2px 8px;
   background-repeat: repeat-y;
   height: 65vh;
-}
+} */
 
 .explore-reports {
   margin-top: 150px;
