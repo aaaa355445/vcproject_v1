@@ -8,6 +8,7 @@ import {
   getFilters,
   getAuthorFilters,
   getSectorFilters,
+  reportTopicEmail,
 } from "../../Services/Api";
 import { ThreeCircles } from "react-loader-spinner";
 import "./Reports.css";
@@ -72,6 +73,9 @@ const Reports = () => {
   const [selectedFilter, setSelectedFilter] = useState("sectors");
   const previousScrollTop = useRef(0);
   const rightReportsRef = useRef(null);
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [searchFlag, setSearchFlag] = useState(false);
 
   useEffect(() => {
     if (!loading && rightReportsRef.current) {
@@ -114,7 +118,7 @@ const Reports = () => {
     };
     fetchAuthorFilter();
     fetchSectorFilter();
-  }, [selectedAuthorIds, selectedSectorIds])
+  }, [selectedAuthorIds, selectedSectorIds]);
 
   const fetchFilters = async () => {
     try {
@@ -309,13 +313,15 @@ const Reports = () => {
     setAllReports([]);
   };
 
+  const inputRef = useRef();
+
   const clearSearch = () => {
     setSearchValue("");
     setSearchQuery("");
     setAllReports([]);
+    setSearchFlag(false);
+    inputRef.current.focus();
   };
-
-  const inputRef = useRef();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -336,6 +342,7 @@ const Reports = () => {
 
   const handleInputChange = (e) => {
     setSearchValue(e.target.value);
+    setSearchFlag(true);
   };
 
   useEffect(() => {
@@ -345,6 +352,28 @@ const Reports = () => {
       document.body.classList.remove("no-scroll");
     }
   }, [showFilter]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await reportTopicEmail(email, searchQuery);
+      if (data.ok) {
+        setMessage(data.message);
+        setEmail("");
+      } else {
+        setMessage(data.message);
+      }
+    } catch (error) {
+      setMessage("An error occurred while subscribing.");
+      console.error("Error subscribing:", error);
+    }
+  };
+
+  const handleClose = () => {
+    setMessage("");
+    setSearchQuery("");
+    setSearchValue("");
+  };
 
   if (loadingReports) {
     return (
@@ -384,7 +413,14 @@ const Reports = () => {
                 ref={inputRef}
                 placeholder={currentPlaceholder}
               />
-              <span className="clearBtn" onClick={clearSearch}>
+              <span
+                className="clearBtn"
+                onClick={clearSearch}
+                style={{
+                  pointerEvents: searchValue ? "auto" : "none",
+                  opacity: searchValue ? 1 : 0.5,
+                }}
+              >
                 Clear
               </span>
             </div>
@@ -589,12 +625,61 @@ const Reports = () => {
                 ))}
               </div>
               <div className="pagination">
-                {allReports.length === 0 ? (
+                {allReports.length === 0 && !searchFlag ? (
                   <div className="no-more-reports">
                     No (more) reports. Please{" "}
                     <a href="/contact"> contact us </a> to suggest if we have
                     missed any.
                   </div>
+                ) : (
+                  reports.length >= 15 && (
+                    <div className="load-more">
+                      <button
+                        onClick={() => {
+                          if (rightReportsRef.current) {
+                            previousScrollTop.current =
+                              rightReportsRef.current.scrollTop;
+                          }
+                          handleLoadMore();
+                        }}
+                      >
+                        Load More
+                      </button>
+                    </div>
+                  )
+                )}
+                {allReports.length === 0 && searchFlag ? (
+                  <>
+                    {message && (
+                      <div className="snackbar">
+                        <p className="message">{message}</p>
+                        <span className="close-button" onClick={handleClose}>
+                          &times;
+                        </span>
+                      </div>
+                    )}
+                    <div className="searchNotFound">
+                      <p>Didn't find what you are looking for?</p>
+                      <p>Let our experts help you.</p>
+                      <p className="searchQuerySection">
+                        Find reports on the topic{" "}
+                        <span className="searchQueryText">"{searchQuery}"</span>{" "}
+                        and mail it to me at
+                      </p>
+                      <form onSubmit={handleSubmit} className="newsletter-form">
+                        <input
+                          className="searchEmail"
+                          type="email"
+                          placeholder="sid@gmail.com"
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                        />
+                        <button className="mailMeBtn" type="submit">
+                          Mail me
+                        </button>
+                      </form>
+                    </div>
+                  </>
                 ) : (
                   reports.length >= 15 && (
                     <div className="load-more">

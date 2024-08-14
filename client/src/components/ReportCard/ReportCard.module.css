@@ -34,6 +34,7 @@
     -webkit-line-clamp: 2; /* Limit the number of lines */
     -webkit-box-orient: vertical; /* Ensure text is truncated vertically */
     display: -webkit-box;
+    text-align: start;
 }
 
 .CardSection .cardContent h4 {

@@ -161,3 +161,13 @@ export const getReportDetails = async (rid) => {
     throw error;
   }
 };
+
+export const reportTopicEmail = async (email, reportTopic) => {
+  try {
+    const response = await axios.post(`${API_URL}/save-report-topic`, { email, reportTopic });
+    return response.data;
+  } catch (error) {
+    console.error("Error saving report topic:", error);
+    throw error;
+  }
+};

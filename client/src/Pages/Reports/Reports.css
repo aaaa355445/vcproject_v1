@@ -319,6 +319,62 @@ input[type="checkbox"] {
   left: 85%;
 }
 
+.searchNotFound {
+  display: flex;
+  flex-direction: column;
+}
+
+.searchNotFound p {
+  margin: 0 auto;
+}
+
+.searchQuery {
+  padding: 0;
+}
+
+.searchQueryText {
+  color: #4343ff;
+  font-weight: bold;
+}
+
+.searchEmail,
+.searchQuery {
+  border: none;
+  border-bottom: 1px solid black;
+}
+
+.searchEmail:focus,
+.searchQuery:focus { 
+  border: none; 
+  outline: none;
+  border-bottom: 1px solid black;
+}
+
+.mailMeBtn {
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.snackbar {
+  position: fixed;
+  background-color: #4343ff;
+  width: 400px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  padding: 10px 10px;
+  top: 12%;
+  left: 50%;
+  z-index: 1000;
+  border: 0.5px solid black;
+}
+
+.close-button {
+  font-size: 18px;
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
   .leftFilter {
     display: none;
@@ -520,4 +576,21 @@ input[type="checkbox"] {
     z-index: 1000;
     margin-top: -10px;
   }
+
+  .snackbar {
+    padding: 10px 10px;
+    top: 11%;
+    left: 0%;
+    font-size: 12px;
+    width: 300px;
+    gap: 5px;
+  }
+
+  .searchQuerySection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
 }

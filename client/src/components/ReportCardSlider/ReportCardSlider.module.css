@@ -1,0 +1,45 @@
+.sliderContainer {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+  }
+  
+  .slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px;
+    scrollbar-width: none; /* For Firefox */
+    gap: 20px;
+  }
+  
+  .slider::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+  }
+  
+  .navButton {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    z-index: 1;
+  }
+  
+  .navButton:focus {
+    outline: none;
+  }
+  
+  .navButton:first-of-type {
+    left: 0;
+  }
+  
+  .navButton:last-of-type {
+    right: 0;
+  }
+  

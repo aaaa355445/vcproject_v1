@@ -8,6 +8,7 @@ import style from "./Home.css";
 import "primeicons/primeicons.css";
 import Marquee from "react-fast-marquee";
 import Faq from "../../components/Faq/Faq";
+import ReportCardSlider from "../../components/ReportCardSlider/ReportCardSlider";
 
 const Home = () => {
   const [reports, setReports] = useState([]);
@@ -255,13 +256,12 @@ const Home = () => {
         </div>
       </div>
 
-      {/* <div className={styles.featuredReports}>
+      <div className={styles.featuredReports}>
         <h2>Featured Reports</h2>
         <div className={styles.container}>
-        {reports.slice(0, 4).map((report, index) => (
-        <ReportCard key={index} report={report} />))}
+        <ReportCardSlider reports={reports} />
         </div>
-      </div> */}
+      </div>
 
       <div className="faq-section">
         <h2>Frequently Asked Questions</h2>

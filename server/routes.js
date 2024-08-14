@@ -9,6 +9,7 @@ const ReportSubscribeController = require("./Controllers/reportSubscribeControll
 const SearchLogsController = require("./Controllers/searchLogsController");
 const ReportLogsController = require("./Controllers/reportLogsController");
 const FilterController = require("./Controllers/filtersController");
+const SearchEmailController = require("./Controllers/searchEmailController");
 
  
 // Reports API
@@ -48,6 +49,9 @@ router.post('/logs-report', ReportLogsController.saveReportLogs);
 router.get('/filters', FilterController.getAllFilters)
 router.post('/author/filters', FilterController.getOtherFiltersFromAuthors)
 router.post('/sector/filters', FilterController.getOtherFiltersFromSector)
+
+// Report Topic Save API
+router.post('/save-report-topic', SearchEmailController.saveEmail);
 
 
 

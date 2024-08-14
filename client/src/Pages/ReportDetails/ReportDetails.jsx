@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getReportDetails } from "../../Services/Api";
 import "./ReportDetails.css";
+import ReportCardSlider from "../../components/ReportCardSlider/ReportCardSlider";
+
 
 const ReportDetails = () => {
   const { rid } = useParams();
@@ -33,8 +35,9 @@ const ReportDetails = () => {
           frameBorder="0"
         ></iframe>
       </div>
-      <div>
+      <div className="simmilarReport">
         <h1>Simmilar Reports</h1>
+        <ReportCardSlider reports={report.similarReports} />
       </div>
     </>
   );
