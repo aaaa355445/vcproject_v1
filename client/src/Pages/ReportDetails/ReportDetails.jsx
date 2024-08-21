@@ -27,7 +27,7 @@ const ReportDetails = () => {
             By ~ {report.author} • {report.sector} • {report.subSector}
           </p>
         </div>
-        <iframe
+        {/* <iframe
           className="report-frame"
           src={report.link}
           style={{ width: "auto", height: "100vh" }}
@@ -36,7 +36,24 @@ const ReportDetails = () => {
         <p>
           If the PDF is not visible,{" "}
           <a href={report.link}>click here to download it</a>.
-        </p>
+        </p> */}
+
+        <object
+          data={report.link}
+          type="application/pdf"
+          width="100%"
+          height="1000vh"
+        >
+          <iframe
+            src={report.link}
+            width="100%"
+            height="1000vh"
+          >
+            This browser does not support PDFs. Please download the PDF to view
+            it:
+            <a href={report.link}>Download PDF</a>
+          </iframe>
+        </object>
       </div>
       <div className="simmilarReport">
         <h1>Simmilar Reports</h1>
