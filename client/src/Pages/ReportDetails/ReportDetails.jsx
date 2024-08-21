@@ -4,7 +4,6 @@ import { getReportDetails } from "../../Services/Api";
 import "./ReportDetails.css";
 import ReportCardSlider from "../../components/ReportCardSlider/ReportCardSlider";
 
-
 const ReportDetails = () => {
   const { rid } = useParams();
   const [report, setReport] = useState(null);
@@ -31,9 +30,13 @@ const ReportDetails = () => {
         <iframe
           className="report-frame"
           src={report.link}
-          style={{ width: "100%", height: "1000px" }}
+          style={{ width: "100%", height: "100vh" }}
           frameBorder="0"
         ></iframe>
+        <p>
+          If the PDF is not visible,{" "}
+          <a href={report.link}>click here to download it</a>.
+        </p>
       </div>
       <div className="simmilarReport">
         <h1>Simmilar Reports</h1>
