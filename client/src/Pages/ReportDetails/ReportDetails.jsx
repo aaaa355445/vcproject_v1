@@ -30,7 +30,7 @@ const ReportDetails = () => {
         <iframe
           className="report-frame"
           src={report.link}
-          style={{ width: "100%", height: "100vh" }}
+          style={{ width: "auto", height: "100vh" }}
           frameBorder="0"
         ></iframe>
         <p>
