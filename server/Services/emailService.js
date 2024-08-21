@@ -13,12 +13,15 @@ class EmailService {
         });
     }
 
-    async sendEmail({ to, subject, text }) {
+    async sendEmail({ to, cc, subject, text }) {
         try {
-            const from = process.env.EMAIL;
+            const fromName = "Ayush Mittal"
+            const fromEmail = process.env.EMAIL;
+            const from = `${fromName} <${fromEmail}>`;
             let info = await this.transporter.sendMail({
                 from,
                 to, 
+                cc,
                 subject, 
                 text
             });

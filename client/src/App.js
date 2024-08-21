@@ -6,6 +6,7 @@ import Reports from './Pages/Reports/Reports';
 import Footer from './components/Footer/Footer';
 import Contact from './Pages/Contact/Contact';
 import FaqPage from './Pages/Faq/FaqPage';
+import ReportsFilters from './Pages/ReportsFilters/ReportsFilters';
 import React, { useEffect } from 'react';
 import { generateGuestUserId } from './Services/Api';
 import ReportDetails from './Pages/ReportDetails/ReportDetails';
@@ -23,6 +24,7 @@ function App() {
           <Route path="/contact" element={ <Contact/>} exact /> 
           <Route path="/faq" element={ <FaqPage/>} exact /> 
           <Route path="/report/:rid" element={ <ReportDetails />} />
+          <Route path="/reports/:filter" element={ <ReportsFilters />} />
       </Routes >
       <Footer />
   </BrowserRouter>

@@ -525,11 +525,6 @@ input[type="checkbox"] {
     width: 75%;
   }
 
-  .rightReports {
-    overflow: scroll;
-    height: auto;
-  }
-
   .no-more-reports {
     display: block;
     align-items: center;

@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from "react";
-import styles from "./Reports.module.css";
 import ReportCard from "../../components/ReportCard/ReportCard";
 import {
   getReports,
@@ -11,9 +10,28 @@ import {
   reportTopicEmail,
 } from "../../Services/Api";
 import { ThreeCircles } from "react-loader-spinner";
-import "./Reports.css";
+import "./ReportsFilters.css";
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 
-const Reports = () => {
+const ReportsFilters = () => {
+  const { filter } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  const parseQueryString = (queryString, key) => {
+    const rawQuery = queryString.substring(1);
+    const regex = new RegExp(`${key}~([\\d_]+)`);
+    const match = rawQuery.match(regex);
+    return match ? match[1] : null;
+  };
+  
+  const sid = parseQueryString(location.search, 'sid');
+  const aid = parseQueryString(location.search, 'aid');
+  const scid = parseQueryString(location.search, 'scid');
+
+
+
+
   const placeholders = [
     "Search for Redseer",
     "Search for Fintech",
@@ -83,14 +101,21 @@ const Reports = () => {
     }
   }, [loading]);
 
-  const handleScrollTop = () => {
-    if (rightReportsRef.current) {
-      previousScrollTop.current =
-        window.innerWidth < 768
-          ? window.scrollY
-          : rightReportsRef.current.scrollTop;
+    useEffect(() => {
+    if (aid) {
+      const aidsFromUrl = aid.split('_'); // Handle multiple aids in the query string
+      const updatedAuthors = {};
+
+      aidsFromUrl.forEach((aidValue) => {
+        updatedAuthors[aidValue] = true; // Set each aid to true
+      });
+
+      setSelectedAuthors((prev) => ({
+        ...prev,
+        ...updatedAuthors
+      }));
     }
-  };
+  }, [aid]);
 
   useEffect(() => {
     let index = 0;
@@ -102,39 +127,16 @@ const Reports = () => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const fetchAuthorFilter = async () => {
-      if (selectedAuthorIds.length > 0) {
-        try {
-          const data = await getAuthorFilters(selectedAuthorIds);
-          setSectors(data.sectors);
-          setSubsectors(data.subSectors);
-        } catch (error) {
-          console.error("Error fetching author filters:", error);
-        }
-      }
-    };
-
-    const fetchSectorFilter = async () => {
-      if (selectedSectorIds.length > 0) {
-        try {
-          const data = await getSectorFilters(selectedSectorIds);
-          setSubsectors(data.subSectors);
-        } catch (error) {
-          console.error("Error fetching author filters:", error);
-        }
-      }
-    };
-    fetchAuthorFilter();
-    fetchSectorFilter();
-  }, [selectedAuthorIds, selectedSectorIds]);
-
   const fetchFilters = async () => {
     try {
       const data = await getFilters();
-      setAuthors(data.authors);
-      setSectors(data.sectors);
-      setSubsectors(data.subSectors);
+      if (filter === "sectors") {
+        setSectors(data.sectors);
+      } else if (filter === "authors") {
+        setAuthors(data.authors);
+      } else if (filter === "subsectors") {
+        setSubsectors(data.subSectors);
+      }
     } catch (err) {
       console.error("Error fetching sectors:", err);
     }
@@ -143,8 +145,10 @@ const Reports = () => {
   useEffect(() => {
     const fetchYearAndCount = async () => {
       try {
-        const data = await getYearAndCount();
-        setYears(data);
+        if (filter === "years") {
+            const data = await getYearAndCount();
+            setYears(data);
+        }
         setLoadingReports(false);
       } catch (err) {
         console.error("Error fetching years:", err);
@@ -154,15 +158,6 @@ const Reports = () => {
     fetchYearAndCount();
     fetchFilters();
   }, []);
-
-  useEffect(() => {
-    setSelectedAuthorIds(
-      Object.keys(selectedAuthors).filter((id) => selectedAuthors[id])
-    );
-    setSelectedSectorIds(
-      Object.keys(selectedSectors).filter((id) => selectedSectors[id])
-    );
-  }, [selectedAuthors, selectedSectors]);
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -201,7 +196,7 @@ const Reports = () => {
         const data = await getReports(
           page,
           yearParam,
-          authorParam,
+          authorParam ? authorParam : aid,
           searchQuery,
           sectorParam,
           subsectorParam
@@ -247,16 +242,35 @@ const Reports = () => {
     setShowSearchPopup(false);
   };
 
-  const handleAuthorCheckboxChange = async (aid) => {
-    setSelectedAuthors((prev) => ({
-      ...prev,
-      [aid]: !prev[aid],
-    }));
+  const handleAuthorCheckboxChange = (aid) => {  
+    setSelectedAuthors((prev) => {
+      // Toggle the selected author in state
+      const updatedAuthors = { ...prev, [aid]: !prev[aid] };
+  
+      // Filter and create the updated aid string for URL
+      const selectedAids = Object.keys(updatedAuthors)
+        .filter((key) => updatedAuthors[key]) // Only include selected authors
+        .join('_');
+  
+      // Construct the new query string for URL
+      const newQueryString = selectedAids ? `aid~${selectedAids}` : '';
+  
+      // Create the new URL with the updated query string
+      const newUrl = `${location.pathname}?${newQueryString}`;
+  
+      // Use navigate to update the URL without refreshing the page
+      navigate(newUrl, { replace: true });
+  
+      return updatedAuthors; // Update the state with the new selection
+    });
+  
+    // Reset the page, reports, and scroll position after selection
     setPage(1);
     setAllReports([]);
     window.scrollTo(0, 0);
     previousScrollTop.current = 0;
   };
+  
 
   const handleYearCheckboxChange = (year) => {
     setSelectedYears((prev) => ({
@@ -270,10 +284,21 @@ const Reports = () => {
   };
 
   const handleSectorCheckboxChange = (sid) => {
-    setSelectedSectors((prev) => ({
-      ...prev,
-      [sid]: !prev[sid],
-    }));
+    setSelectedSectors((prev) => {
+        const updatedSectors = { ...prev, [sid]: !prev[sid] };
+    
+        const selectedSids = Object.keys(updatedSectors)
+          .filter(key => updatedSectors[key])
+          .join('_');
+    
+        const newQueryString = selectedSids ? `sid~${selectedSids}` : '';
+        const newUrl = `${location.pathname}?${newQueryString}`;
+        navigate(newUrl, { replace: true });
+    
+        return updatedSectors;
+      });
+
+
     setPage(1);
     setAllReports([]);
     window.scrollTo(0, 0);
@@ -304,13 +329,8 @@ const Reports = () => {
   };
 
   const handleLoadMore = () => {
-    setTimeout(() => {
-      if (rightReportsRef.current) {
-        previousScrollTop.current = rightReportsRef.current.scrollTop;
-      }
-      setLoading(true);
-      setPage((prevPage) => prevPage + 1);
-    }, 100); // adjust the timeout as necessary
+    setLoading(true);
+    setPage((prevPage) => prevPage + 1);
   };
 
   const handleSearchMobile = () => {
@@ -445,175 +465,189 @@ const Reports = () => {
       <div className="lowersection">
         <div className="leftFilter">
           <div className="filters">
-            <div className="category">
-              <h4>Sector</h4>
-              <div className="categoryData">
-                {sectors.slice(0, visibleSectors).map((sector) => (
-                  <span key={sector.sid} className="sectorCheckbox">
-                    <input
-                      type="checkbox"
-                      checked={selectedSectors[sector.sid] || false}
-                      onChange={() => handleSectorCheckboxChange(sector.sid)}
-                    />
-                    <p>{sector.name}</p>
-                  </span>
-                ))}
-              </div>
-              <div className="loadmore">
-                {visibleSectors < sectors.length && (
-                  <span onClick={toggleSectorsPopup}>
-                    +{sectors.length - 8} more
-                  </span>
-                )}
-              </div>
-              {showSectorsPopup && (
-                <div className="popup">
-                  <div className="popup-content">
-                    <button
-                      className="close-popup"
-                      onClick={toggleSectorsPopup}
-                    >
-                      &times;
-                    </button>
-                    <div className="popup-sectors">
-                      {sectors.map((sector) => (
-                        <span key={sector.sid} className="popup-sectorCheckbox">
-                          <input
-                            type="checkbox"
-                            checked={selectedSectors[sector.sid] || false}
-                            onChange={() =>
-                              handleSectorCheckboxChange(sector.sid)
-                            }
-                          />
-                          <p>{sector.name}</p>
-                        </span>
-                      ))}
+            {filter === "sectors" && (
+              <div className="category">
+                <h4>Sector</h4>
+                <div className="categoryData">
+                  {sectors.slice(0, visibleSectors).map((sector) => (
+                    <span key={sector.sid} className="sectorCheckbox">
+                      <input
+                        type="checkbox"
+                        checked={selectedSectors[sector.sid] || false}
+                        onChange={() => handleSectorCheckboxChange(sector.sid)}
+                      />
+                      <p>{sector.name}</p>
+                    </span>
+                  ))}
+                </div>
+                <div className="loadmore">
+                  {visibleSectors < sectors.length && (
+                    <span onClick={toggleSectorsPopup}>
+                      +{sectors.length - 8} more
+                    </span>
+                  )}
+                </div>
+                {showSectorsPopup && (
+                  <div className="popup">
+                    <div className="popup-content">
+                      <button
+                        className="close-popup"
+                        onClick={toggleSectorsPopup}
+                      >
+                        &times;
+                      </button>
+                      <div className="popup-sectors">
+                        {sectors.map((sector) => (
+                          <span
+                            key={sector.sid}
+                            className="popup-sectorCheckbox"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedSectors[sector.sid] || false}
+                              onChange={() =>
+                                handleSectorCheckboxChange(sector.sid)
+                              }
+                            />
+                            <p>{sector.name}</p>
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-
-            <div className="category">
-              <h4>Sub Categories</h4>
-              <div className="categoryData">
-                {subsectors.slice(0, visibleSubsectors).map((subsector) => (
-                  <span key={subsector.ssid} className="sectorCheckbox">
-                    <input
-                      type="checkbox"
-                      checked={selectedSubSectors[subsector.ssid] || false}
-                      onChange={() =>
-                        handleSubSectorCheckboxChange(subsector.ssid)
-                      }
-                    />
-                    <p>{subsector.name}</p>
-                  </span>
-                ))}
-              </div>
-              <div className="loadmore">
-                {visibleSubsectors < subsectors.length && (
-                  <span onClick={toggleSubSectorsPopup}>
-                    +{subsectors.length - 8} more
-                  </span>
                 )}
               </div>
-              {showSubSectorsPopup && (
-                <div className="popup">
-                  <div className="popup-content">
-                    <button
-                      className="close-popup"
-                      onClick={toggleSubSectorsPopup}
-                    >
-                      &times;
-                    </button>
-                    <div className="popup-sectors">
-                      {subsectors.map((subsector) => (
-                        <span
-                          key={subsector.ssid}
-                          className="popup-sectorCheckbox"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={
-                              selectedSubSectors[subsector.ssid] || false
-                            }
-                            onChange={() =>
-                              handleSubSectorCheckboxChange(subsector.ssid)
-                            }
-                          />
-                          <p>{subsector.name}</p>
-                        </span>
-                      ))}
+            )}
+
+            {filter === "subsectors" && (
+              <div className="category">
+                <h4>Sub Categories</h4>
+                <div className="categoryData">
+                  {subsectors.slice(0, visibleSubsectors).map((subsector) => (
+                    <span key={subsector.ssid} className="sectorCheckbox">
+                      <input
+                        type="checkbox"
+                        checked={selectedSubSectors[subsector.ssid] || false}
+                        onChange={() =>
+                          handleSubSectorCheckboxChange(subsector.ssid)
+                        }
+                      />
+                      <p>{subsector.name}</p>
+                    </span>
+                  ))}
+                </div>
+                <div className="loadmore">
+                  {visibleSubsectors < subsectors.length && (
+                    <span onClick={toggleSubSectorsPopup}>
+                      +{subsectors.length - 8} more
+                    </span>
+                  )}
+                </div>
+                {showSubSectorsPopup && (
+                  <div className="popup">
+                    <div className="popup-content">
+                      <button
+                        className="close-popup"
+                        onClick={toggleSubSectorsPopup}
+                      >
+                        &times;
+                      </button>
+                      <div className="popup-sectors">
+                        {subsectors.map((subsector) => (
+                          <span
+                            key={subsector.ssid}
+                            className="popup-sectorCheckbox"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={
+                                selectedSubSectors[subsector.ssid] || false
+                              }
+                              onChange={() =>
+                                handleSubSectorCheckboxChange(subsector.ssid)
+                              }
+                            />
+                            <p>{subsector.name}</p>
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-
-            <div className="author">
-              <h4>Authors</h4>
-              <div className="authorsData">
-                {authors.slice(0, visibleAuthors).map((author) => (
-                  <span key={author.aid} className="authorCheckbox">
-                    <input
-                      type="checkbox"
-                      checked={selectedAuthors[author.aid] || false}
-                      onChange={() => handleAuthorCheckboxChange(author.aid)}
-                    />{" "}
-                    {author.name}
-                  </span>
-                ))}
-              </div>
-              <div className="loadmore">
-                {visibleAuthors < authors.length && (
-                  <span onClick={toggleAuthorsPopup}>
-                    +{authors.length - 8} more
-                  </span>
                 )}
               </div>
-              {showAuthorsPopup && (
-                <div className="popup">
-                  <div className="popup-content">
-                    <button
-                      className="close-popup"
-                      onClick={toggleAuthorsPopup}
-                    >
-                      &times;
-                    </button>
-                    <div className="popup-authors">
-                      {authors.map((author) => (
-                        <span key={author.aid} className="popup-authorCheckbox">
-                          <input
-                            type="checkbox"
-                            checked={selectedAuthors[author.aid] || false}
-                            onChange={() =>
-                              handleAuthorCheckboxChange(author.aid)
-                            }
-                          />{" "}
-                          {author.name}
-                        </span>
-                      ))}
+            )}
+
+            {filter === "authors" && (
+              <div className="author">
+                <h4>Authors</h4>
+                <div className="authorsData">
+                  {authors.slice(0, visibleAuthors).map((author) => (
+                    <span key={author.aid} className="authorCheckbox">
+                      <input
+                        type="checkbox"
+                        checked={selectedAuthors[author.aid] || false}
+                        onChange={() => handleAuthorCheckboxChange(author.aid)}
+                      />{" "}
+                      {author.name}
+                    </span>
+                  ))}
+                </div>
+                <div className="loadmore">
+                  {visibleAuthors < authors.length && (
+                    <span onClick={toggleAuthorsPopup}>
+                      +{authors.length - 8} more
+                    </span>
+                  )}
+                </div>
+                {showAuthorsPopup && (
+                  <div className="popup">
+                    <div className="popup-content">
+                      <button
+                        className="close-popup"
+                        onClick={toggleAuthorsPopup}
+                      >
+                        &times;
+                      </button>
+                      <div className="popup-authors">
+                        {authors.map((author) => (
+                          <span
+                            key={author.aid}
+                            className="popup-authorCheckbox"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedAuthors[author.aid] || false}
+                              onChange={() =>
+                                handleAuthorCheckboxChange(author.aid)
+                              }
+                            />{" "}
+                            {author.name}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-
-            <div className="year">
-              <h4>Select Year</h4>
-              <div className="yearData">
-                {years.map((year) => (
-                  <span key={year.year} className="yearCheckbox">
-                    <input
-                      type="checkbox"
-                      checked={selectedYears[year.year] || false}
-                      onChange={() => handleYearCheckboxChange(year.year)}
-                    />
-                    <p>{year.year}</p>
-                  </span>
-                ))}
+                )}
               </div>
-            </div>
+            )}
+
+            {filter === "years" && (
+              <div className="year">
+                <h4>Select Year</h4>
+                <div className="yearData">
+                  {years.map((year) => (
+                    <span key={year.year} className="yearCheckbox">
+                      <input
+                        type="checkbox"
+                        checked={selectedYears[year.year] || false}
+                        onChange={() => handleYearCheckboxChange(year.year)}
+                      />
+                      <p>{year.year}</p>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -645,7 +679,23 @@ const Reports = () => {
                     <a href="/contact"> contact us </a> to suggest if we have
                     missed any.
                   </div>
-                ) : null}
+                ) : (
+                  reports.length >= 15 && (
+                    <div className="load-more">
+                      <button
+                        onClick={() => {
+                          if (rightReportsRef.current) {
+                            previousScrollTop.current =
+                              rightReportsRef.current.scrollTop;
+                          }
+                          handleLoadMore();
+                        }}
+                      >
+                        Load More
+                      </button>
+                    </div>
+                  )
+                )}
                 {allReports.length === 0 && searchFlag ? (
                   <>
                     {message && (
@@ -683,8 +733,11 @@ const Reports = () => {
                     <div className="load-more">
                       <button
                         onClick={() => {
-                          handleScrollTop(); // Save scroll position
-                          handleLoadMore(); // Trigger load more functionality
+                          if (rightReportsRef.current) {
+                            previousScrollTop.current =
+                              rightReportsRef.current.scrollTop;
+                          }
+                          handleLoadMore();
                         }}
                       >
                         Load More
@@ -843,4 +896,4 @@ const Reports = () => {
   );
 };
 
-export default Reports;
+export default ReportsFilters;

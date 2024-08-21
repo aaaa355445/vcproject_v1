@@ -15,9 +15,10 @@ class SearchEmailController {
       const newReportTopic = new reportEmailModel({ email, reportTopic });
       const savedReportTopic = await newReportTopic.save();
       emailService.sendEmail({
-        to: ["sidharthv605@gmail.com", "choudharynandini1@gmail.com", "chetanyaarora009@gmail.com", "mittalayush740@gmail.com "],
-        subject: "You have a new query",
-        text: `This is the query:\n"${reportTopic}"\n${email}\nrequested this query.`
+        to: email,
+        cc: ["sidharthv605@gmail.com", "choudharynandini1@gmail.com", "chetanyaarora009@gmail.com", "mittalayush740@gmail.com "],
+        subject: "Query received - The VC Project",
+        text: `Hello,\nThanks for dropping your query.\nOur research team is tagged on this email and will revert shortly. Please feel free to share more information regarding your query that you think might help the team.\n\nThis is the query we have received "${reportTopic}"\n\nBest,\nThe VC Project Team`
       });
 
       return res.status(200).json({
