@@ -398,7 +398,9 @@ input[type="checkbox"] {
 
   .rightReports {
     width: 100%;
-  }
+    overflow: scroll;
+    height: auto;
+}
 
   .upersection {
     display: none;

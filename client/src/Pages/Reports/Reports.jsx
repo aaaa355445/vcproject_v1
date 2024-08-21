@@ -723,7 +723,14 @@ const Reports = () => {
                 ref={inputRef}
                 placeholder={currentPlaceholder}
               />
-              <span className="clearBtn" onClick={clearSearch}>
+              <span
+                className="clearBtn"
+                onClick={clearSearch}
+                style={{
+                  pointerEvents: searchValue ? "auto" : "none",
+                  opacity: searchValue ? 1 : 0.5,
+                }}
+              >
                 Clear
               </span>
             </div>
