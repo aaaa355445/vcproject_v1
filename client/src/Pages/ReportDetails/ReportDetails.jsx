@@ -7,6 +7,7 @@ import ReportCardSlider from "../../components/ReportCardSlider/ReportCardSlider
 const ReportDetails = () => {
   const { rid } = useParams();
   const [report, setReport] = useState(null);
+
   useEffect(() => {
     const fetchReport = async () => {
       const data = await getReportDetails(rid);
@@ -18,6 +19,7 @@ const ReportDetails = () => {
   if (!report) {
     return <div>Loading...</div>;
   }
+
   return (
     <>
       <div className="reportDetails">
@@ -27,36 +29,18 @@ const ReportDetails = () => {
             By ~ {report.author} • {report.sector} • {report.subSector}
           </p>
         </div>
-        {/* <iframe
-          className="report-frame"
-          src={report.link}
-          style={{ width: "auto", height: "100vh" }}
-          frameBorder="0"
-        ></iframe>
-        <p>
-          If the PDF is not visible,{" "}
-          <a href={report.link}>click here to download it</a>.
-        </p> */}
-
-        <object
-          data={report.link}
-          type="application/pdf"
-          width="100%"
-          height="1000vh"
-        >
+        <div className="report-frame-wrapper">
           <iframe
+            className="report-frame"
             src={report.link}
-            width="100%"
-            height="1000vh"
-          >
-            This browser does not support PDFs. Please download the PDF to view
-            it:
-            <a href={report.link}>Download PDF</a>
-          </iframe>
-        </object>
+            frameBorder="0"
+            scrolling="yes"
+            title="Report PDF"
+          ></iframe>
+        </div>
       </div>
       <div className="simmilarReport">
-        <h1>Simmilar Reports</h1>
+        <h1>Similar Reports</h1>
         <ReportCardSlider reports={report.similarReports} />
       </div>
     </>
