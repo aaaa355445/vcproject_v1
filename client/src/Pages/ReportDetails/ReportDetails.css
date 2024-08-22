@@ -47,36 +47,15 @@
     margin-bottom: 20px;
 }
 
-
-.report-frame-wrapper {
+.pdfViewer {
     width: 100%;
-    height: auto;
-    overflow-x: auto; /* Enable horizontal scrolling if needed */
+    height: 100vh; /* Adjust height as needed */
+    overflow: hidden;
   }
   
-  .report-frame {
-    width: 100%;
-    height: 1000px; /* Adjust based on content */
-    border: none;
-  }
-  
-  /* Mobile styles */
-  @media only screen and (max-width: 768px) {
-    .report-frame {
-      width: 100%; /* Ensure full width on mobile */
-      height: 600px; /* Reduce the height for mobile */
-      overflow: auto;
-    }
-  
-    /* Force zooming out on mobile devices */
-    .report-frame-wrapper {
-      overflow-x: scroll; /* Enable scrolling on mobile */
-      -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
-    }
-  
-    /* Set a minimum width for the iframe to ensure it's scrollable horizontally */
-    .report-frame {
-      min-width: 768px; /* Forces content to fit and be scrollable */
+  @media (max-width: 768px) {
+    .pdfViewer {
+      height: 80vh;
     }
   }
   
