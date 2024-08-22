@@ -13,7 +13,8 @@ const ReportDetails = () => {
   useEffect(() => {
     const fetchReport = async () => {
       const data = await getReportDetails(rid);
-      setReport(data);
+      const modifiedLink = data.link.replace(".cdn", "");
+      setReport({ ...data, link: modifiedLink });
     };
     fetchReport();
   }, [rid]);
@@ -32,7 +33,6 @@ const ReportDetails = () => {
           </p>
         </div>
 
-        {/* Use react-pdf Viewer component */}
         <div className="pdfViewer">
           <Worker
             workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}
