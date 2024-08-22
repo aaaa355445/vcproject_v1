@@ -29,6 +29,7 @@ const ReportDetails = () => {
             By ~ {report.author} • {report.sector} • {report.subSector}
           </p>
         </div>
+        {/* Add a wrapper around iframe for responsiveness */}
         <div className="report-frame-wrapper">
           <iframe
             className="report-frame"

@@ -49,31 +49,34 @@
 
 
 .report-frame-wrapper {
-    position: relative;
     width: 100%;
-    overflow: hidden;
-    padding-top: 56.25%; /* This will give it a 16:9 aspect ratio */
+    height: auto;
+    overflow-x: auto; /* Enable horizontal scrolling if needed */
   }
   
   .report-frame {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
+    height: 1000px; /* Adjust based on content */
     border: none;
   }
   
+  /* Mobile styles */
   @media only screen and (max-width: 768px) {
-    .report-frame-wrapper {
-      padding-top: 100%; /* This will adjust the aspect ratio on mobile */
-    }
-    
     .report-frame {
-      width: 100%;
-      height: 100%;
+      width: 100%; /* Ensure full width on mobile */
+      height: 600px; /* Reduce the height for mobile */
       overflow: auto;
-      -webkit-overflow-scrolling: touch; /* For smooth scrolling on mobile */
+    }
+  
+    /* Force zooming out on mobile devices */
+    .report-frame-wrapper {
+      overflow-x: scroll; /* Enable scrolling on mobile */
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
+    }
+  
+    /* Set a minimum width for the iframe to ensure it's scrollable horizontally */
+    .report-frame {
+      min-width: 768px; /* Forces content to fit and be scrollable */
     }
   }
   
