@@ -69,69 +69,75 @@ class ReportController {
 
   async getReports(req, res) {
     try {
-      const page = req.query.page || 1;
+      const page = parseInt(req.query.page) || 1;
       const limit = 15;
       const skip = (page - 1) * limit;
-
-      const filters = {};
-
+  
+      const filters = {}; // Initialize filters for AND logic
+      const orFilters = []; // Initialize array for OR logic
+  
+      // Handle "year" filter
       if (req.query.year) {
         const years = req.query.year.split("_").map((year) => Number(year));
         filters.year = { $in: years };
       }
-
+  
+      // Handle "author" filter
       if (req.query.author) {
         const authors = req.query.author.split("_");
-        filters.author = { $in: authors };
+        orFilters.push({ author: { $in: authors } });
       }
-
+  
+      // Handle "sector" filter
       if (req.query.sector) {
         const sectors = req.query.sector.split("_");
-        filters.sector = { $in: sectors };
+        orFilters.push({ sector: { $in: sectors } });
       }
-
+  
+      // Handle "subSector" filter
       if (req.query.subSector) {
         const subSectors = req.query.subSector.split("_");
-        filters.subSector = { $in: subSectors };
+        orFilters.push({ subSector: { $in: subSectors } });
       }
-
+  
+      // Handle "searchQuery" filter with regex
       if (req.query.searchQuery) {
         const searchRegex = { $regex: req.query.searchQuery, $options: "i" };
         const matchingAuthors = await authorController.getMatchingAuthor(searchRegex);
         const matchingSectors = await sectorController.getMatchingSector(searchRegex);
         const matchingSubSectors = await subsectorController.getMatchingSubSector(searchRegex);
-
-
+  
         const authorIds = matchingAuthors.map((author) => author.aid);
         const sectorIds = matchingSectors.map((sector) => sector.sid);
         const subSectorIds = matchingSubSectors.map((subSector) => subSector.ssid);
-
-        filters.$or = [
+  
+        orFilters.push(
           { title: searchRegex },
           { author: { $in: authorIds } },
           { sector: { $in: sectorIds } },
           { subSector: { $in: subSectorIds } },
           { tags: { $elemMatch: { $regex: req.query.searchQuery, $options: "i" } } }
-        ];
+        );
       }
-
+  
+      // Determine if we should use AND or OR logic
+      const finalQuery = orFilters.length > 0 ? { $or: orFilters, ...filters } : filters;
+    
+      // Fetch reports with the constructed query
       const reports = await reportModel
-        .find(filters)
+        .find(finalQuery)
         .skip(skip)
         .limit(limit)
         .sort({ rid: 1 });
-
+  
+      console.log("Reports fetched from DB:", reports.length);
+  
+      // Transform reports to include related names
       const transformedReports = await Promise.all(
         reports.map(async (report) => {
-          const authorName = await authorController.getAuthorNames(
-            report.author
-          );
-          const sectorName = await sectorController.getSectorName(
-            report.sector
-          );
-          const subSectorName = await subsectorController.getSubSectorName(
-            report.subSector
-          );
+          const authorName = await authorController.getAuthorNames(report.author);
+          const sectorName = await sectorController.getSectorName(report.sector);
+          const subSectorName = await subsectorController.getSubSectorName(report.subSector);
           return {
             rid: report.rid,
             title: report.title,
@@ -145,14 +151,14 @@ class ReportController {
           };
         })
       );
-
+  
       return res.status(200).json({ reports: transformedReports });
     } catch (err) {
-      console.log(err);
+      console.error("Error fetching reports:", err);
       return res.status(500).json({ message: "Something went wrong!!" });
     }
   }
-
+    
   async getYearCount(req, res) {
     try {
       const yearlyCounts = await reportModel.aggregate([

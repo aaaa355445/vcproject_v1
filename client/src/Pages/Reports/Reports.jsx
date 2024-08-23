@@ -6,14 +6,29 @@ import {
   getYearAndCount,
   saveSearchQuery,
   getFilters,
-  getAuthorFilters,
-  getSectorFilters,
   reportTopicEmail,
 } from "../../Services/Api";
 import { ThreeCircles } from "react-loader-spinner";
 import "./Reports.css";
+import { useLocation, useNavigate } from 'react-router-dom';
+
 
 const Reports = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const parseQueryString = (queryString, key) => {
+    const rawQuery = queryString.substring(1);
+    const regex = new RegExp(`${key}~([\\d_]+)`);
+    const match = rawQuery.match(regex);
+    return match ? match[1] : null;
+  };
+  
+  const sid = parseQueryString(location.search, 'sid');
+  const aid = parseQueryString(location.search, 'aid');
+  const scid = parseQueryString(location.search, 'scid');
+  const year = parseQueryString(location.search, 'year');
+
   const placeholders = [
     "Search for Redseer",
     "Search for Fintech",
@@ -102,33 +117,6 @@ const Reports = () => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const fetchAuthorFilter = async () => {
-      if (selectedAuthorIds.length > 0) {
-        try {
-          const data = await getAuthorFilters(selectedAuthorIds);
-          setSectors(data.sectors);
-          setSubsectors(data.subSectors);
-        } catch (error) {
-          console.error("Error fetching author filters:", error);
-        }
-      }
-    };
-
-    const fetchSectorFilter = async () => {
-      if (selectedSectorIds.length > 0) {
-        try {
-          const data = await getSectorFilters(selectedSectorIds);
-          setSubsectors(data.subSectors);
-        } catch (error) {
-          console.error("Error fetching author filters:", error);
-        }
-      }
-    };
-    fetchAuthorFilter();
-    fetchSectorFilter();
-  }, [selectedAuthorIds, selectedSectorIds]);
-
   const fetchFilters = async () => {
     try {
       const data = await getFilters();
@@ -140,29 +128,76 @@ const Reports = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchYearAndCount = async () => {
-      try {
-        const data = await getYearAndCount();
-        setYears(data);
-        setLoadingReports(false);
-      } catch (err) {
-        console.error("Error fetching years:", err);
-      }
-    };
+  const fetchYearAndCount = async () => {
+    try {
+      const data = await getYearAndCount();
+      setYears(data);
+      setLoadingReports(false);
+    } catch (err) {
+      console.error("Error fetching years:", err);
+    }
+  };
 
+  useEffect(() => {
     fetchYearAndCount();
     fetchFilters();
   }, []);
 
   useEffect(() => {
-    setSelectedAuthorIds(
-      Object.keys(selectedAuthors).filter((id) => selectedAuthors[id])
-    );
-    setSelectedSectorIds(
-      Object.keys(selectedSectors).filter((id) => selectedSectors[id])
-    );
-  }, [selectedAuthors, selectedSectors]);
+    if (aid) {
+      const aidsFromUrl = aid.split('_');
+      const updatedAuthors = {};
+
+      aidsFromUrl.forEach((aidValue) => {
+        updatedAuthors[aidValue] = true;
+      });
+
+      setSelectedAuthors((prev) => ({
+        ...prev,
+        ...updatedAuthors
+      }));
+    } 
+    if (sid) {
+      const sidsFromUrl = sid.split('_');
+      const updatedSectors = {};
+
+      sidsFromUrl.forEach((sidValue) => {
+        updatedSectors[sidValue] = true;
+      });
+
+      setSelectedSectors((prev) => ({
+        ...prev,
+        ...updatedSectors
+      }));
+    }
+    if (scid) {
+      const scidsFromUrl = scid.split('_');
+      const updatedSubSectors = {};
+
+      scidsFromUrl.forEach((scidValue) => {
+        updatedSubSectors[scidValue] = true;
+      });
+
+      setSelectedSubSectors((prev) => ({
+        ...prev,
+        ...updatedSubSectors
+      }));
+    }
+    if (year) {
+      const yearsFromUrl = year.split('_');
+      const updatedYears = {};
+
+      yearsFromUrl.forEach((yearsValue) => {
+        updatedYears[yearsValue] = true;
+      });
+
+      setSelectedYears((prev) => ({
+        ...prev,
+        ...updatedYears
+      }));
+    }
+
+  }, [aid, sid, scid, year]);
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -200,11 +235,11 @@ const Reports = () => {
 
         const data = await getReports(
           page,
-          yearParam,
-          authorParam,
+          yearParam ? yearParam : year,
+          authorParam ? authorParam : aid,
           searchQuery,
-          sectorParam,
-          subsectorParam
+          sectorParam ? sectorParam : sid,
+          subsectorParam ? subsectorParam : scid
         );
         setReports(data.reports);
         setAllReports((prevAllReports) => {
@@ -247,44 +282,111 @@ const Reports = () => {
     setShowSearchPopup(false);
   };
 
-  const handleAuthorCheckboxChange = async (aid) => {
-    setSelectedAuthors((prev) => ({
-      ...prev,
-      [aid]: !prev[aid],
-    }));
-    setPage(1);
-    setAllReports([]);
-    window.scrollTo(0, 0);
-    previousScrollTop.current = 0;
-  };
-
-  const handleYearCheckboxChange = (year) => {
-    setSelectedYears((prev) => ({
-      ...prev,
-      [year]: !prev[year],
-    }));
-    setPage(1);
-    setAllReports([]);
-    window.scrollTo(0, 0);
-    previousScrollTop.current = 0;
-  };
-
   const handleSectorCheckboxChange = (sid) => {
-    setSelectedSectors((prev) => ({
-      ...prev,
-      [sid]: !prev[sid],
-    }));
+    setSelectedSectors((prev) => {
+      const updatedSectors = { ...prev, [sid]: !prev[sid] };
+      const selectedSids = Object.keys(updatedSectors)
+        .filter((key) => updatedSectors[key])
+        .join('_');
+  
+      const newQueryString = new URLSearchParams({
+        ...(selectedSids ? { sid: selectedSids } : {}),
+        ...(aid ? { aid } : {}),
+        ...(scid ? { scid } : {}),
+        ...(year ? { year } : {}),
+      }).toString().replace(/=/g, '~');
+  
+      const newUrl = `${location.pathname}?${newQueryString}`;
+  
+      navigate(newUrl, { replace: true });
+  
+      return updatedSectors;
+    });
+  
     setPage(1);
     setAllReports([]);
     window.scrollTo(0, 0);
     previousScrollTop.current = 0;
   };
-
+  
+  
+  const handleAuthorCheckboxChange = (aid) => {
+    setSelectedAuthors((prev) => {
+      const updatedAuthors = { ...prev, [aid]: !prev[aid] };
+      const selectedAids = Object.keys(updatedAuthors)
+        .filter((key) => updatedAuthors[key])
+        .join('_');
+  
+      const newQueryString = new URLSearchParams({
+        ...(sid ? { sid } : {}),
+        ...(selectedAids ? { aid: selectedAids } : {}),
+        ...(scid ? { scid } : {}),
+        ...(year ? { year } : {}),
+      }).toString().replace(/=/g, '~');
+  
+      const newUrl = `${location.pathname}?${newQueryString}`;
+  
+      navigate(newUrl, { replace: true });
+  
+      return updatedAuthors;
+    });
+  
+    setPage(1);
+    setAllReports([]);
+    window.scrollTo(0, 0);
+    previousScrollTop.current = 0;
+  };
+  
   const handleSubSectorCheckboxChange = (ssid) => {
-    setSelectedSubSectors((prev) => ({
-      ...prev,
-      [ssid]: !prev[ssid],
-    }));
+    setSelectedSubSectors((prev) => {
+      const updatedSubSectors = { ...prev, [ssid]: !prev[ssid] };
+      const selectedSsids = Object.keys(updatedSubSectors)
+        .filter((key) => updatedSubSectors[key])
+        .join('_');
+  
+      const newQueryString = new URLSearchParams({
+        ...(sid ? { sid } : {}),
+        ...(aid ? { aid } : {}),
+        ...(selectedSsids ? { scid: selectedSsids } : {}),
+        ...(year ? { year } : {}),
+      }).toString().replace(/=/g, '~');
+  
+      const newUrl = `${location.pathname}?${newQueryString}`;
+  
+      navigate(newUrl, { replace: true });
+  
+      return updatedSubSectors;
+    });
+  
+    setPage(1);
+    setAllReports([]);
+    window.scrollTo(0, 0);
+    previousScrollTop.current = 0;
+  };
+  
+
+  const handleYearCheckboxChange = (year) => {  
+    setSelectedYears((prev) => {
+      const updatedyears = { ...prev, [year]: !prev[year] };
+  
+      const selectedYears = Object.keys(updatedyears)
+        .filter((key) => updatedyears[key])
+        .join('_');
+  
+        const newQueryString = new URLSearchParams({
+          ...(sid ? { sid } : {}),
+          ...(aid ? { aid } : {}),
+          ...(scid ? { scid } : {}),
+          ...(selectedYears ? { year: selectedYears } : {}),
+        }).toString().replace(/=/g, '~');
+  
+      const newUrl = `${location.pathname}?${newQueryString}`;
+  
+      navigate(newUrl, { replace: true });
+  
+      return updatedyears;
+    });
+  
     setPage(1);
     setAllReports([]);
     window.scrollTo(0, 0);
@@ -310,7 +412,7 @@ const Reports = () => {
       }
       setLoading(true);
       setPage((prevPage) => prevPage + 1);
-    }, 100); // adjust the timeout as necessary
+    }, 100);
   };
 
   const handleSearchMobile = () => {
