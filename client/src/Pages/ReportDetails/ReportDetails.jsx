@@ -32,7 +32,12 @@ const ReportDetails = () => {
             By ~ {report.author} • {report.sector} • {report.subSector}
           </p>
         </div>
-
+        <div className="pdfDownload">
+          <p>
+            If you want to see this report in new tab in a pdf format,{" "}
+            <span><a href={report.link} target="__blank">Click here</a></span>
+          </p>
+        </div>
         <div className="pdfViewer">
           <Worker
             workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}
