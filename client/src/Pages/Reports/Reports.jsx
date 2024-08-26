@@ -10,8 +10,7 @@ import {
 } from "../../Services/Api";
 import { ThreeCircles } from "react-loader-spinner";
 import "./Reports.css";
-import { useLocation, useNavigate } from 'react-router-dom';
-
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Reports = () => {
   const location = useLocation();
@@ -23,11 +22,11 @@ const Reports = () => {
     const match = rawQuery.match(regex);
     return match ? match[1] : null;
   };
-  
-  const sid = parseQueryString(location.search, 'sid');
-  const aid = parseQueryString(location.search, 'aid');
-  const scid = parseQueryString(location.search, 'scid');
-  const year = parseQueryString(location.search, 'year');
+
+  const sid = parseQueryString(location.search, "sid");
+  const aid = parseQueryString(location.search, "aid");
+  const scid = parseQueryString(location.search, "scid");
+  const year = parseQueryString(location.search, "year");
 
   const placeholders = [
     "Search for Redseer",
@@ -145,7 +144,7 @@ const Reports = () => {
 
   useEffect(() => {
     if (aid) {
-      const aidsFromUrl = aid.split('_');
+      const aidsFromUrl = aid.split("_");
       const updatedAuthors = {};
 
       aidsFromUrl.forEach((aidValue) => {
@@ -154,11 +153,11 @@ const Reports = () => {
 
       setSelectedAuthors((prev) => ({
         ...prev,
-        ...updatedAuthors
+        ...updatedAuthors,
       }));
-    } 
+    }
     if (sid) {
-      const sidsFromUrl = sid.split('_');
+      const sidsFromUrl = sid.split("_");
       const updatedSectors = {};
 
       sidsFromUrl.forEach((sidValue) => {
@@ -167,11 +166,11 @@ const Reports = () => {
 
       setSelectedSectors((prev) => ({
         ...prev,
-        ...updatedSectors
+        ...updatedSectors,
       }));
     }
     if (scid) {
-      const scidsFromUrl = scid.split('_');
+      const scidsFromUrl = scid.split("_");
       const updatedSubSectors = {};
 
       scidsFromUrl.forEach((scidValue) => {
@@ -180,11 +179,11 @@ const Reports = () => {
 
       setSelectedSubSectors((prev) => ({
         ...prev,
-        ...updatedSubSectors
+        ...updatedSubSectors,
       }));
     }
     if (year) {
-      const yearsFromUrl = year.split('_');
+      const yearsFromUrl = year.split("_");
       const updatedYears = {};
 
       yearsFromUrl.forEach((yearsValue) => {
@@ -193,10 +192,9 @@ const Reports = () => {
 
       setSelectedYears((prev) => ({
         ...prev,
-        ...updatedYears
+        ...updatedYears,
       }));
     }
-
   }, [aid, sid, scid, year]);
 
   useEffect(() => {
@@ -287,106 +285,112 @@ const Reports = () => {
       const updatedSectors = { ...prev, [sid]: !prev[sid] };
       const selectedSids = Object.keys(updatedSectors)
         .filter((key) => updatedSectors[key])
-        .join('_');
-  
+        .join("_");
+
       const newQueryString = new URLSearchParams({
         ...(selectedSids ? { sid: selectedSids } : {}),
         ...(aid ? { aid } : {}),
         ...(scid ? { scid } : {}),
         ...(year ? { year } : {}),
-      }).toString().replace(/=/g, '~');
-  
+      })
+        .toString()
+        .replace(/=/g, "~");
+
       const newUrl = `${location.pathname}?${newQueryString}`;
-  
+
       navigate(newUrl, { replace: true });
-  
+
       return updatedSectors;
     });
-  
+
     setPage(1);
     setAllReports([]);
     window.scrollTo(0, 0);
     previousScrollTop.current = 0;
   };
-  
-  
+
   const handleAuthorCheckboxChange = (aid) => {
     setSelectedAuthors((prev) => {
       const updatedAuthors = { ...prev, [aid]: !prev[aid] };
       const selectedAids = Object.keys(updatedAuthors)
         .filter((key) => updatedAuthors[key])
-        .join('_');
-  
+        .join("_");
+
       const newQueryString = new URLSearchParams({
         ...(sid ? { sid } : {}),
         ...(selectedAids ? { aid: selectedAids } : {}),
         ...(scid ? { scid } : {}),
         ...(year ? { year } : {}),
-      }).toString().replace(/=/g, '~');
-  
+      })
+        .toString()
+        .replace(/=/g, "~");
+
       const newUrl = `${location.pathname}?${newQueryString}`;
-  
+
       navigate(newUrl, { replace: true });
-  
+
       return updatedAuthors;
     });
-  
+
     setPage(1);
     setAllReports([]);
     window.scrollTo(0, 0);
     previousScrollTop.current = 0;
   };
-  
+
   const handleSubSectorCheckboxChange = (ssid) => {
     setSelectedSubSectors((prev) => {
       const updatedSubSectors = { ...prev, [ssid]: !prev[ssid] };
       const selectedSsids = Object.keys(updatedSubSectors)
         .filter((key) => updatedSubSectors[key])
-        .join('_');
-  
+        .join("_");
+
       const newQueryString = new URLSearchParams({
         ...(sid ? { sid } : {}),
         ...(aid ? { aid } : {}),
         ...(selectedSsids ? { scid: selectedSsids } : {}),
         ...(year ? { year } : {}),
-      }).toString().replace(/=/g, '~');
-  
+      })
+        .toString()
+        .replace(/=/g, "~");
+
       const newUrl = `${location.pathname}?${newQueryString}`;
-  
+
       navigate(newUrl, { replace: true });
-  
+
       return updatedSubSectors;
     });
-  
+
     setPage(1);
     setAllReports([]);
     window.scrollTo(0, 0);
     previousScrollTop.current = 0;
   };
-  
 
-  const handleYearCheckboxChange = (year) => {  
+  const handleYearCheckboxChange = (year) => {
     setSelectedYears((prev) => {
       const updatedyears = { ...prev, [year]: !prev[year] };
-  
+
       const selectedYears = Object.keys(updatedyears)
         .filter((key) => updatedyears[key])
-        .join('_');
-  
-        const newQueryString = new URLSearchParams({
-          ...(sid ? { sid } : {}),
-          ...(aid ? { aid } : {}),
-          ...(scid ? { scid } : {}),
-          ...(selectedYears ? { year: selectedYears } : {}),
-        }).toString().replace(/=/g, '~');
-  
+        .join("_");
+
+      const newQueryString = new URLSearchParams({
+        ...(sid ? { sid } : {}),
+        ...(aid ? { aid } : {}),
+        ...(scid ? { scid } : {}),
+        ...(selectedYears ? { year: selectedYears } : {}),
+      })
+        .toString()
+        .replace(/=/g, "~");
+
       const newUrl = `${location.pathname}?${newQueryString}`;
-  
+
       navigate(newUrl, { replace: true });
-  
+
       return updatedyears;
     });
-  
+
     setPage(1);
     setAllReports([]);
     window.scrollTo(0, 0);
@@ -514,10 +518,12 @@ const Reports = () => {
       <div className="upersection">
         <div className="container">
           <div className="leftSection">
-            <span style={{ fontWeight: "bold" }}>FILTERS</span>
-            <span className="clearBtn" onClick={clearAllFilter}>
-              Reset
-            </span>
+            <div className="filterText">
+              <span style={{ fontWeight: "bold" }}>FILTERS</span>
+              <span className="clearBtn" onClick={clearAllFilter}>
+                Reset
+              </span>
+            </div>
           </div>
           <div className="rightSection">
             <div className="searchSection">

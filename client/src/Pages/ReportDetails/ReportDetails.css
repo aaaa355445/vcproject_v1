@@ -56,7 +56,13 @@
   
   @media (max-width: 768px) {
     .pdfViewer {
-      height: 80vh;
+        height: 100%;
     }
+    div[data-testid="core__inner-pages"] {
+        width: 100%;
+        overflow: hidden !important;
+      }
+      
+     
   }
   
