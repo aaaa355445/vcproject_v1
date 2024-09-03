@@ -43,7 +43,7 @@ const ReportDetails = () => {
             workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}
           >
             <Viewer
-              fileUrl="/pdfjs/pdf.js"
+              fileUrl={report.link}
               onError={(error) => console.error("Failed to load PDF:", error)}
             />
           </Worker>
