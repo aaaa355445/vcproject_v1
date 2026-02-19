@@ -281,7 +281,7 @@ const Home = () => {
                 alt=""
               />
               <h3>Insightful Ayush</h3>
-              <p>Consumer Tech at Redseer Strategy</p>
+              <p>Consumer Tech at Bain & Company</p>
               <p>Product & Growth</p>
               <div className="socials">
                 <a  target="_blank" href="https://www.linkedin.com/in/ayushmittal22">
@@ -329,9 +329,9 @@ const Home = () => {
 
           <div className="member">
             <div className="gridmem">
-              <img className="memberImg" src="/images/sid-image.jpeg" alt="" />
+              <img className="memberImg" src="/images/sid_profile_im.png" alt="" />
               <h3>Explorer Sidharth</h3>
-              <p>SDE1 at Dailyobjects</p>
+              <p>SDE1 at Truto</p>
               <p>Tech</p>
               <div className="socials">
                 <a target="_blank" href="https://www.linkedin.com/in/sidharthv17">
@@ -341,33 +341,6 @@ const Home = () => {
                   />
                 </a>
                 <a href="mailto:sidharthv605@gmail.com">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Gmail_icon_%282020%29.svg/2560px-Gmail_icon_%282020%29.svg.png"
-                    alt=""
-                  />
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div className="member">
-            <div className="gridmem">
-              <img
-                className="memberImg"
-                src="https://vc-thumbnails.blr1.cdn.digitaloceanspaces.com/thumbnails/photo.webp"
-                alt=""
-              />
-              <h3>Reliable Chetanya</h3>
-              <p>The VC Project</p>
-              <p>Research</p>
-              <div className="socials">
-                <a target="_blank" href="https://www.linkedin.com/in/chetanya-arora-6a854b254">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/LinkedIn_logo_initials.png/480px-LinkedIn_logo_initials.png"
-                    alt=""
-                  />
-                </a>
-                <a href="mailto:chetanyaarora009@gmail.com">
                   <img
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Gmail_icon_%282020%29.svg/2560px-Gmail_icon_%282020%29.svg.png"
                     alt=""
